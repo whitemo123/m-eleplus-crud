@@ -10,13 +10,10 @@ node_modules
 
 # Bundle
 dist
-coverage
 packages/m-eleplus-crud/version.ts
 
 # local env files
 *.local
 .eslintcache
-cypress/screenshots/*
-cypress/videos/*
 tmp
 docs/.vitepress/cache

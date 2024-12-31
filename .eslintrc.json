@@ -1,6 +1,4 @@
 {
   "root": true,
-  "extends": [
-    "@m-eleplus-crud/eslint-config"
-  ]
+  "extends": ["@m-eleplus-crud/eslint-config"]
 }
