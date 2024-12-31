@@ -1,0 +1,26 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "ESNext"
+    ],
+    "types": [
+      "node"
+    ],
+    "skipLibCheck": true
+  },
+  "include": [
+    "internal/**/*",
+    "internal/**/*.json",
+    "scripts/**/*",
+    "packages/theme-chalk/*",
+    "packages/m-eleplus-crud/version.ts",
+    "packages/m-eleplus-crud/package.json"
+  ],
+  "exclude": [
+    "**/__tests__/**",
+    "**/tests/**",
+    "**/dist"
+  ]
+}
