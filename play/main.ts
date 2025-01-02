@@ -1,5 +1,13 @@
 import { Component, createApp } from 'vue';
 
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+
+import MElePlusCrud from 'm-eleplus-crud'
+import "@m-eleplus-crud/theme-chalk/src/index.scss"
+
+
 (async () => {
   const apps = import.meta.glob<
     true,
@@ -14,6 +22,11 @@ import { Component, createApp } from 'vue';
   }
   const App = (await file()).default
   const app = createApp(App)
+
+  app.use(ElementPlus, {
+    locale: zhCn
+  })
+  app.use(MElePlusCrud)
 
   app.mount('#play')
 })()

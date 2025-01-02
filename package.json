@@ -7,7 +7,6 @@
     "docs"
   ],
   "scripts": {
-    "cz": "czg",
     "prepare:e2e": "if [ ! -d \"docs/.vitepress/dist\" ]; then pnpm run docs:build; fi;",
     "dev": "pnpm -C play dev",
     "gen": "bash ./scripts/gc.sh",

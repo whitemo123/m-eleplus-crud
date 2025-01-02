@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useLocale } from '@m-eleplus-crud/hooks'
+// import { useLocale } from '@m-eleplus-crud/hooks'
 import { tableProps } from './table'
 
 const COMPONENT_NAME = 'MTable'
@@ -9,9 +9,13 @@ defineOptions({
 
 defineProps(tableProps)
 
-const { t } = useLocale()
+// const { t } = useLocale()
 </script>
 
 <template>
-  <div class="test">{{ t('m.table.menuTitle') }}</div>
+  <div class="m-table">
+    <el-table style="width: 100%" :data="data">
+      <el-table-column v-if="option.menu" label="操作" align="center" />
+    </el-table>
+  </div>
 </template>
