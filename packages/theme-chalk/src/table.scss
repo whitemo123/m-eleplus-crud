@@ -1,3 +1,53 @@
-.test {
-  background-color: red;
+.m-table {
+  // 清除单选模式下的单选空格
+  .table-radio {
+    .el-radio__label {
+      display: none;
+    }
+  }
+
+  .el-table__header {
+    th.el-table__cell {
+      background-color: #fafafa;
+      color: rgba(0,0,0,.85);
+    }
+  }
+
+  .el-table {
+    // 解决tool-tip纯数字不换行问题
+    .el-popper span:first-child {
+      word-break: break-word;
+      word-wrap: break-word;
+      white-space: -hp-pre-wrap;
+      white-space: -o-pre-wrap;
+      white-space: -pre-wrap;
+      white-space: -moz-pre-wrap;
+      white-space: pre;
+      white-space: pre-wrap;
+      white-space: pre-line;
+    }
+  }
+
+  // 帮助信息表头
+  .help-table-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+}
+
+#qrcode-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
+    cursor: pointer;
+  }
+}
+.qrcode-preview-code {
+  color: #333;
+  margin: 10px auto;
+  text-align: center;
 }

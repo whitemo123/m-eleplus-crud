@@ -1,0 +1,18 @@
+.m-dialog {
+  --el-dialog-margin-top: 2vh !important;
+  margin-bottom: 0 !important;
+  .el-dialog__body {
+    max-height: calc(96vh - 120px);
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #d7d7d7;
+      border-radius: 6px;
+    }
+  }
+}

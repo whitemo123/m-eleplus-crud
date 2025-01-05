@@ -17,6 +17,13 @@ export const configProviderProps = buildProps({
    * @description 组件尺寸
    */
   size: useSizeProp,
+  /**
+   * @description 外部传递的http get请求函数
+   */
+  httpGet: {
+    type: Function,
+    required: false,
+  },
 } as const)
 
 export type ConfigProviderProps = ExtractPropTypes<typeof configProviderProps>

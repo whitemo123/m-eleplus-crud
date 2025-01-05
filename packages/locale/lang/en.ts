@@ -3,6 +3,11 @@ export default {
   m: {
     table: {
       menuTitle: 'Action',
+      preview: 'Preview',
+    },
+    dialog: {
+      cancelText: 'Cancel',
+      confirmText: 'Confirm',
     },
   },
 }

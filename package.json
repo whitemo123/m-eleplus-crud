@@ -49,9 +49,11 @@
     "@types/lodash": "^4.14.182",
     "@types/lodash-es": "^4.17.6",
     "@vueuse/core": "^9.1.0",
+    "jsbarcode": "^3.11.6",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
-    "lodash-unified": "^1.0.2"
+    "lodash-unified": "^1.0.2",
+    "qrcodejs2-fix": "^0.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.6.1",

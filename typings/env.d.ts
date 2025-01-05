@@ -14,6 +14,8 @@ declare global {
       style?: unknown
     }
   }
+
+  declare module 'qrcodejs2-fix'
 }
 
 declare module '@vue/runtime-core' {
@@ -30,4 +32,4 @@ declare module '@vue/runtime-core' {
   }
 }
 
-export { }
+export {}

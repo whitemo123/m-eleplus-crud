@@ -4,8 +4,12 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+
 import MElePlusCrud from 'm-eleplus-crud'
 import "@m-eleplus-crud/theme-chalk/src/index.scss"
+
+import { httpGet } from './src/request';
 
 
 (async () => {
@@ -26,7 +30,15 @@ import "@m-eleplus-crud/theme-chalk/src/index.scss"
   app.use(ElementPlus, {
     locale: zhCn
   })
-  app.use(MElePlusCrud)
+
+  for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
+  }
+
+  app.use(MElePlusCrud, {
+    size: 'large',
+    httpGet: httpGet.bind(this)
+  })
 
   app.mount('#play')
 })()

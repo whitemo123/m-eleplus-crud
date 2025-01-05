@@ -10,6 +10,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
     "m-eleplus-crud": "workspace:^",
+    "qrcodejs2-fix": "^0.0.1",
     "vue": "^3.2.37"
   },
   "devDependencies": {

@@ -43,6 +43,9 @@ importers:
       '@vueuse/core':
         specifier: ^9.1.0
         version: 9.13.0(vue@3.5.13(typescript@5.5.4))
+      jsbarcode:
+        specifier: ^3.11.6
+        version: 3.11.6
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -52,6 +55,9 @@ importers:
       lodash-unified:
         specifier: ^1.0.2
         version: 1.0.3(@types/lodash-es@4.17.12)(lodash-es@4.17.21)(lodash@4.17.21)
+      qrcodejs2-fix:
+        specifier: ^0.0.1
+        version: 0.0.1
     devDependencies:
       '@commitlint/cli':
         specifier: ^18.6.1
@@ -445,6 +451,9 @@ importers:
       '@vueuse/core':
         specifier: ^9.1.0
         version: 9.13.0(vue@3.5.13(typescript@5.5.4))
+      jsbarcode:
+        specifier: ^3.11.6
+        version: 3.11.6
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -454,6 +463,9 @@ importers:
       lodash-unified:
         specifier: ^1.0.2
         version: 1.0.3(@types/lodash-es@4.17.12)(lodash-es@4.17.21)(lodash@4.17.21)
+      qrcodejs2-fix:
+        specifier: ^0.0.1
+        version: 0.0.1
     devDependencies:
       '@types/node':
         specifier: '*'
@@ -509,6 +521,9 @@ importers:
       m-eleplus-crud:
         specifier: workspace:^
         version: link:../packages/m-eleplus-crud
+      qrcodejs2-fix:
+        specifier: ^0.0.1
+        version: 0.0.1
       vue:
         specifier: ^3.2.37
         version: 3.5.13(typescript@5.5.4)
@@ -5793,6 +5808,9 @@ packages:
     resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
     hasBin: true
 
+  jsbarcode@3.11.6:
+    resolution: {integrity: sha512-G5TKGyKY1zJo0ZQKFM1IIMfy0nF2rs92BLlCz+cU4/TazIc4ZH+X1GYeDRt7TKjrYqmPfTjwTBkU/QnQlsYiuA==}
+
   jsbn@0.1.1:
     resolution: {integrity: sha512-UVU9dibq2JcFWxQPA6KCqj5O42VOmAY3zQUfEKxU0KpTGXwNoCjkX1e13eHNvw/xPynt6pU0rZ1htjWTNTSXsg==}
 
@@ -7285,6 +7303,9 @@ packages:
     resolution: {integrity: sha512-tVtvNSOOqlq75rUgwLeDAEQoLIiBqmRg0/zedpI6fuqIocIkuxG23A7FIl1oVSkuSMMLgcOP5kVhNETmsmjvPw==}
     engines: {node: '>=14.1.0'}
     deprecated: < 22.8.2 is no longer supported
+
+  qrcodejs2-fix@0.0.1:
+    resolution: {integrity: sha512-1R6jB87k1PUwjX65hh24FftDjrghPvryYfsajV3chCp//dQb8QUeL446DVLj2SIeotP8ro9rSYri0wOp7O+7Hg==}
 
   qs@6.5.3:
     resolution: {integrity: sha512-qxXIEh4pCGfHICj1mAJQ2/2XVZkjCDTcEgfoSQxc/fYivUZxTkk7L3bDBJSoNrEzXI17oUO5Dp07ktqE5KzczA==}
@@ -15092,6 +15113,8 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
+  jsbarcode@3.11.6: {}
+
   jsbn@0.1.1: {}
 
   jsbn@1.1.0: {}
@@ -16649,6 +16672,8 @@ snapshots:
       - encoding
       - supports-color
       - utf-8-validate
+
+  qrcodejs2-fix@0.0.1: {}
 
   qs@6.5.3: {}
 

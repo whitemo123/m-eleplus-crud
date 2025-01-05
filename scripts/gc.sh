@@ -78,13 +78,11 @@ export type { ${NAME}Instance } from './src/instance'
 EOF
 
 cat > $DIRNAME/style/index.ts <<EOF
-import '@m-eleplus-crud/components/base/style'
 import '@m-eleplus-crud/theme-chalk/src/$INPUT_NAME.scss'
 EOF
 
 cat > $DIRNAME/style/css.ts <<EOF
-import '@m-eleplus-crud/components/base/style/css'
-import '@m-eleplus-crud/theme-chalk/el-$INPUT_NAME.css'
+import '@m-eleplus-crud/theme-chalk/m-$INPUT_NAME.css'
 EOF
 
 cat > $FILE_PATH/theme-chalk/src/$INPUT_NAME.scss <<EOF
@@ -94,4 +92,4 @@ perl -0777 -pi -e "s/\n\n/\nexport * from '.\/$INPUT_NAME'\n\n/" $FILE_PATH/comp
 
 TYPE_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")/../typings" && pwd)
 
-perl -0777 -pi -e "s/\n\s+}/\n    El$NAME: typeof import('m-eleplus-crud')['El$NAME']\n  }/" $TYPE_PATH/global.d.ts
+perl -0777 -pi -e "s/\n\s+}/\n    M$NAME: typeof import('m-eleplus-crud')['M$NAME']\n  }/" $TYPE_PATH/global.d.ts
