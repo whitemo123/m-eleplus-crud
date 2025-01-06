@@ -12,7 +12,7 @@ import { useLocale } from '@m-eleplus-crud/hooks'
 import { tableEmits, tableProps } from './table'
 import type { IDictValue } from '@m-eleplus-crud/components/common'
 
-import type { ITableColumn } from './table'
+import type { ITableColumn, ITableOption } from './table'
 
 const COMPONENT_NAME = 'MTable'
 defineOptions({
@@ -42,8 +42,23 @@ const NEED_SLOT_TYPE = [
   ...NEED_DIC_TYPE,
 ]
 
-// 当前配置列
-const tableColumns = ref<ITableColumn[]>([])
+// 表格配置
+const tableOption = ref<ITableOption>({
+  // 默认显示操作栏
+  menu: false,
+  // 默认不显示斑马纹
+  stripe: false,
+  // 默认不显示边框
+  border: false,
+  // 操作栏宽度
+  menuWidth: 220,
+  // 操作栏固定右侧
+  menuFixed: 'right',
+  // 操作栏按钮居中
+  menuAlign: 'center',
+  // 表格列配置
+  column: [],
+})
 
 // 一维码/二维码 预览弹窗
 const codePreviewDialog = ref(false)
@@ -194,8 +209,11 @@ const getAllRemoteDics = () => {
           const { list, label, value } = column.dicFormatter(e)
           if (list && Array.isArray(list)) {
             column['dicData'] = list.map((item) => {
+              const lastLabel = label.replace(/\{(\w+)\}/g, (match, key) => {
+                return item[key] || match
+              })
               return {
-                label: item[label],
+                label: lastLabel,
                 value: item[value],
               }
             })
@@ -211,8 +229,9 @@ const getAllRemoteDics = () => {
     })
   }
   const remotePromise: Promise<any>[] = []
-  for (let i = 0; i < tableColumns.value.length; i++) {
-    const column = tableColumns.value[i]
+  for (let i = 0; i < (tableOption.value.column || []).length; i++) {
+    // @ts-ignore
+    const column = tableOption.value.column[i]
     if (column.dicUrl) {
       if (!column.dicFormatter) {
         debugWarn('MTable', 'dicUrl and dicFormatter must be used together')
@@ -255,19 +274,19 @@ const formatDicValue = (row: any, column: ITableColumn) => {
     let values: any = []
 
     if (
-      row[column.prop as string] != null &&
-      row[column.prop as string] != undefined &&
-      row[column.prop as string] !== ''
+      row[column.prop || ''] != null &&
+      row[column.prop || ''] != undefined &&
+      row[column.prop || ''] !== ''
     ) {
-      if (Array.isArray(row[column.prop as string])) {
+      if (Array.isArray(row[column.prop || ''])) {
         // 数据就是数组
-        values = row[column.prop as string]
-      } else if (typeof row[column.prop as string] === 'string') {
+        values = row[column.prop || '']
+      } else if (typeof row[column.prop || ''] === 'string') {
         // 数据是字符串，启动字符分割，后续需要弄成从配置读取
-        values = row[column.prop as string].split(',')
+        values = row[column.prop || ''].split(',')
       } else {
         // 最后情况变成数组
-        values = [row[column.prop as string]]
+        values = [row[column.prop || '']]
       }
     }
     // 结果集合
@@ -282,15 +301,22 @@ const formatDicValue = (row: any, column: ITableColumn) => {
     return result.join(',')
   }
   // 单模式
-  dictLabel = findLabelByValue(column.dicData || [], row[column.prop as string])
+  dictLabel = findLabelByValue(column.dicData || [], row[column.prop || ''])
   return dictLabel
 }
 
 watch(
-  () => props?.option?.column as any,
-  (newVal: ITableColumn[]) => {
-    if (newVal && newVal.length) {
-      tableColumns.value = cloneDeep(newVal.filter((column) => !column.hide))
+  () => props.option as ITableOption,
+  (newVal: ITableOption) => {
+    if (newVal) {
+      tableOption.value = Object.assign({}, tableOption.value, newVal)
+      if (newVal.column) {
+        tableOption.value.column = cloneDeep(
+          newVal.column.filter(
+            (column) => !(props.permission[column.prop || ''] === false)
+          )
+        )
+      }
       // 处理远程字典的配置
       getAllRemoteDics()
     }
@@ -329,7 +355,7 @@ defineExpose({
       @selection-change="selectionChange"
     >
       <el-table-column
-        v-for="(column, columnIndex) in tableColumns"
+        v-for="(column, columnIndex) in tableOption.column"
         :key="columnIndex"
         :type="['index', 'selection'].includes(column.type as string) ? column.type : null"
         :width="column.width"
@@ -354,7 +380,7 @@ defineExpose({
           </el-tooltip>
         </template>
         <!---->
-        <template v-if="slots[column.prop as string]" #default="scope">
+        <template v-if="slots[column.prop || '']" #default="scope">
           <slot :name="column.prop" v-bind="scope" />
         </template>
         <template
@@ -363,28 +389,32 @@ defineExpose({
         >
           <!--图片-->
           <MPicture
-            v-if="column.type === 'picture' && scope.row[column.prop as string]"
-            :src="getProductPic(scope.row[column.prop as string], column)[0]"
-            :preview-src-list="getProductPic(scope.row[column.prop as string], column)"
+            v-if="column.type === 'picture' && scope.row[column.prop || '']"
+            :src="getProductPic(scope.row[column.prop || ''], column)[0]"
+            :preview-src-list="
+              getProductPic(scope.row[column.prop || ''], column)
+            "
           />
           <!---->
           <!--二维码-->
           <MQrcode
-            v-else-if="column.type === 'qrcode' && scope.row[column.prop as string]"
-            :text="scope.row[column.prop as string]"
+            v-else-if="column.type === 'qrcode' && scope.row[column.prop || '']"
+            :text="scope.row[column.prop || '']"
             :qrcode-width="column.qrcodeWidth"
             :qrcode-height="column.qrcodeHeight"
             align="center"
-            @click="openPreviewCode(scope.row[column.prop as string], 2)"
+            @click="openPreviewCode(scope.row[column.prop || ''], 2)"
           />
           <!---->
           <!--一维码-->
           <MBarcode
-            v-else-if="column.type === 'barcode' && scope.row[column.prop as string]"
-            :text="scope.row[column.prop as string]"
+            v-else-if="
+              column.type === 'barcode' && scope.row[column.prop || '']
+            "
+            :text="scope.row[column.prop || '']"
             :barcode-width="column.barcodeWith"
             :barcode-height="column.barcodeHeight"
-            @click="openPreviewCode(scope.row[column.prop as string], 1)"
+            @click="openPreviewCode(scope.row[column.prop || ''], 1)"
           />
           <!---->
           <!--单选-->
@@ -402,8 +432,8 @@ defineExpose({
       </el-table-column>
       <!--操作栏-->
       <el-table-column
-        v-if="option.menu"
-        :label="option.menuTitle || t('m.table.menuTitle')"
+        v-if="tableOption.menu"
+        :label="tableOption.menuTitle || t('m.table.menuTitle')"
         align="center"
       >
         <template #default="scope">

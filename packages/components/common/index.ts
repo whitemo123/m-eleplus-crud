@@ -1,7 +1,7 @@
 /**
  * @description 输入框类型
  */
-export type InputTypes = 'input' | 'number' | 'textarea'
+export type InputTypes = 'input' | 'number' | 'textarea' | 'password'
 
 /**
  * @description 时间类型

@@ -52,7 +52,6 @@ const tableOption = ref<any>({
     {
       label: "ID",
       prop: "id",
-      hide: false,
       overHidden: true,
       help: '测试帮助信息',
       formatter: (row: any, column: any, index: number) => {
@@ -117,13 +116,14 @@ const tableOption = ref<any>({
       prop: "classId",
       type: 'select',
       dicUrl: '/class/list',
+      multiple: true,
       dicQuery: {
         status: 1
       },
       dicHeaders: {
         testHeader: '1'
       },
-      dicFormatter: (res: any) => ({list: res.data, label: 'label', value: 'value'})
+      dicFormatter: (res: any) => ({list: res.data, label: '{label}-{value}', value: 'value'})
     }
   ]
 })
@@ -134,7 +134,7 @@ const selectData = ref<any>([])
 <template>
   <div>
     {{ selectData }}
-    <MTable :data="tableData" :option="tableOption" v-model:select="selectData">
+    <MTable :data="tableData" :option="tableOption" v-model:select="selectData" :permission="{'pic': true}">
       <template #menu="scope">
         <!-- <button>{{ scope.row.id }}</button> -->
         <el-input v-model="scope.row.id"></el-input>

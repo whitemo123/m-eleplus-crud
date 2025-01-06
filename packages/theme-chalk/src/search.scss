@@ -1,0 +1,11 @@
+.m-search {
+  overflow-x: hidden;
+  padding-bottom: 5px;
+  box-sizing: border-box;
+
+  .m-search-btns {
+    .el-form-item__content {
+      justify-content: center;
+    }
+  }
+}

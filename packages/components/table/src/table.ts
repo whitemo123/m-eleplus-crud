@@ -11,10 +11,6 @@ export interface ITableColumn extends ICommonColumn {
    */
   align?: 'left' | 'center' | 'right'
   /**
-   * @description 隐藏列
-   */
-  hide?: boolean
-  /**
    * @description 超出隐藏
    */
   overHidden?: boolean
@@ -123,20 +119,13 @@ export const tableProps = buildProps({
   option: {
     type: definePropType<ITableOption>(Object),
     required: false,
-    default: () => ({
-      // 默认显示操作栏
-      menu: false,
-      // 默认不显示斑马纹
-      stripe: false,
-      // 默认不显示边框
-      border: false,
-      // 操作栏宽度
-      menuWidth: 220,
-      // 操作栏固定右侧
-      menuFixed: 'right',
-      // 操作栏按钮居中
-      menuAlign: 'center',
-    }),
+  },
+  /**
+   * @description 权限配置
+   */
+  permission: {
+    type: Object,
+    default: {},
   },
 } as const)
 

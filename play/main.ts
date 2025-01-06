@@ -36,7 +36,7 @@ import { httpGet } from './src/request';
   }
 
   app.use(MElePlusCrud, {
-    size: 'large',
+    size: 'default',
     httpGet: httpGet.bind(this)
   })
 
