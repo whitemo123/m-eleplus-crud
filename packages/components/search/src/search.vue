@@ -1,84 +1,7 @@
-<template>
-  <div
-    v-if="searchOption.column && searchOption.column.length"
-    class="m-search"
-  >
-    <el-form
-      ref="formRef"
-      :inline="true"
-      :model="proxys"
-      :size="size || globalConfig.size"
-      :disabled="loading"
-      :label-width="searchOption.labelWidth"
-      @submit.prevent
-    >
-      <el-row :gutter="0">
-        <template
-          v-for="(column, columnIndex) in searchOption.column"
-          :key="columnIndex"
-        >
-          <el-col
-            v-if="
-              !searchOption.col ||
-              !searchCol ||
-              columnIndex < (searchOption.colIndex || 3)
-            "
-            :span="column.span || 6"
-          >
-            <el-form-item
-              style="width: 100%"
-              :label="column.label + ':'"
-              :prop="column.prop"
-              :rules="column.rules"
-            >
-              <!--插槽-->
-              <slot
-                v-if="slots[column.prop || '']"
-                :name="column.prop"
-                v-bind="{ size: size || globalConfig.size, loading: loading }"
-              />
-              <!---->
-              <!--输入框-->
-              <template
-                v-else-if="!column.type || INPUT_TYPES.includes(column.type)"
-              >
-                <el-input
-                  v-model.trim="proxys[column.prop || '']"
-                  style="width: 100%"
-                  type="text"
-                />
-              </template>
-              <!---->
-              <!--单选/多选-->
-              <template
-                v-else-if="SELECT_TYPES.includes(column.type as string)"
-              >
-                <el-select
-                  v-model="proxys[column.prop || '']"
-                  style="width: 100%"
-                  :multiple="column.multiple || column.type === 'checkbox'"
-                  :clearable="column.clearable"
-                >
-                  <el-option
-                    v-for="(dicItem, dicIndex) in column.dicData"
-                    :key="dicIndex"
-                    :label="dicItem.label"
-                    :value="dicItem.value"
-                  />
-                </el-select>
-              </template>
-              <!---->
-            </el-form-item>
-          </el-col>
-        </template>
-      </el-row>
-    </el-form>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { ref, useSlots, watch } from 'vue'
 import { cloneDeep, get, set } from 'lodash-unified'
+import { useLocale } from '@m-eleplus-crud/hooks'
 import { useGlobalConfig } from '@m-eleplus-crud/components'
 import { debugWarn } from '@m-eleplus-crud/utils'
 import { searchEmits, searchProps } from './search'
@@ -96,7 +19,9 @@ const emit = defineEmits(searchEmits)
 
 // 插槽信息
 const slots = useSlots() as any
-console.log(emit)
+
+// 国际化
+const { t } = useLocale()
 
 // 输入框类型
 const INPUT_TYPES = ['input', 'textarea', 'number', 'password']
@@ -104,7 +29,28 @@ const INPUT_TYPES = ['input', 'textarea', 'number', 'password']
 // 下拉选择类型
 const SELECT_TYPES = ['select', 'checkbox', 'radio', 'switch']
 
+// 时间选择类型
+const DATE_TYPES = [
+  'year',
+  'month',
+  'date',
+  'datetime',
+  'week',
+  'datetimerange',
+  'daterange',
+  'monthrange',
+  'yearrange',
+  'time',
+  'timerange',
+]
+
 const searchOption = ref<ISearchOption>({
+  searchBtnText: t('m.search.searchBtnText'),
+  resetBtnText: t('m.search.resetBtnText'),
+  // 搜索按钮默认Search图标
+  searchBtnIcon: 'Search',
+  // 重置按钮默认Delete图标
+  resetBtnIcon: 'Delete',
   // 默认label宽度80px
   labelWidth: '80px',
   // 默认展示3个
@@ -134,6 +80,112 @@ const proxys: any = new Proxy(props.model as any, {
     return true
   },
 })
+
+/**
+ * 初始化搜索表单的值
+ */
+const initValue = () => {
+  // 初始化搜索表单的值
+  if (searchOption.value && searchOption.value.column) {
+    for (let i = 0; i < searchOption.value.column?.length; i++) {
+      const column = searchOption.value.column[i]
+      if (column.prop && proxys[column.prop] === undefined) {
+        if (column.value) {
+          proxys[column.prop] = column.value
+        } else {
+          const ARR_TYPES = [
+            'checkbox',
+            'datetimerange',
+            'daterange',
+            'monthrange',
+            'yearrange',
+            'timerange',
+          ]
+          if (
+            (column.type === 'select' && column.multiple) ||
+            ARR_TYPES.includes(column.type || '')
+          ) {
+            proxys[column.prop] = []
+          } else {
+            proxys[column.prop] = ''
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * 根据类型获取默认时间格式
+ * @param type 类型
+ */
+const getValueFormatByType = (type: string) => {
+  let format = ''
+  switch (type) {
+    case 'yearrange':
+    case 'year':
+      format = 'YYYY'
+      break
+    case 'monthrange':
+    case 'month':
+      format = 'YYYY-MM'
+      break
+    case 'daterange':
+    case 'week':
+    case 'date':
+      format = 'YYYY-MM-DD'
+      break
+    case 'datetimerange':
+    case 'datetime':
+      format = 'YYYY-MM-DD HH:mm:ss'
+      break
+    case 'time':
+      format = 'HH:mm:ss'
+      break
+  }
+  return format
+}
+
+/**
+ * 查询搜索触发
+ * @param page 第一页
+ */
+const search = (page = 1) => {
+  formRef.value?.validate((valid) => {
+    if (valid) {
+      // 搜索从第一页开始搜索，也支持传入页码
+      if (proxys.page) {
+        proxys.page = page
+      }
+      // emit搜索事件 如果非第一页，自动重置第一页
+      emit('search', proxys)
+    }
+  })
+}
+
+/**
+ * 重置搜索
+ */
+const reset = () => {
+  // 重置分页参数
+  if (proxys.page) {
+    proxys.page = 1
+  }
+  if (proxys.limit) {
+    proxys.limit = 10
+  }
+  // 清空搜索表单的字段
+  formRef.value?.resetFields()
+  // emit重置事件
+  emit('reset')
+}
+
+/**
+ * 展开/折叠搜索
+ */
+const toggleCol = () => {
+  searchCol.value = !searchCol.value
+}
 
 /**
  * 处理需要远程获取字典的配置
@@ -200,13 +252,17 @@ watch(
       searchOption.value = Object.assign({}, searchOption.value, newVal)
       if (newVal.column) {
         searchOption.value.column = cloneDeep(
-          newVal.column.filter(
-            (column) => !(props.permission[column.prop || ''] === false)
-          )
+          newVal.column
+            .filter(
+              (column) => !(props.permission[column.prop || ''] === false)
+            )
+            .sort((a, b) => (b.order || 0) - (a.order || 0))
         )
       }
       // 处理远程字典的配置
       getAllRemoteDics()
+      // 初始化搜索表单的值
+      initValue()
     }
   },
   {
@@ -214,4 +270,154 @@ watch(
     deep: true,
   }
 )
+
+defineExpose({
+  /**
+   * @description 搜索方法
+   */
+  search,
+  /**
+   * @description 重置方法
+   */
+  reset,
+})
 </script>
+
+<template>
+  <div
+    v-if="searchOption.column && searchOption.column.length"
+    class="m-search"
+  >
+    <el-form
+      ref="formRef"
+      :inline="true"
+      :model="proxys"
+      :size="size || globalConfig.size"
+      :disabled="loading"
+      :label-width="searchOption.labelWidth"
+      @submit.prevent
+    >
+      <el-row :gutter="0">
+        <template
+          v-for="(column, columnIndex) in searchOption.column"
+          :key="columnIndex"
+        >
+          <el-col
+            v-if="
+              !searchOption.col ||
+              !searchCol ||
+              columnIndex < (searchOption.colIndex || 3)
+            "
+            :span="column.span || 6"
+          >
+            <el-form-item
+              style="width: 100%"
+              :label="column.label + ':'"
+              :prop="column.prop"
+              :rules="column.rules"
+            >
+              <!--插槽-->
+              <slot
+                v-if="slots[column.prop || '']"
+                :name="column.prop"
+                v-bind="{ size: size || globalConfig.size, loading: loading }"
+              />
+              <!---->
+              <!--输入框-->
+              <template
+                v-else-if="!column.type || INPUT_TYPES.includes(column.type)"
+              >
+                <el-input
+                  v-model.trim="proxys[column.prop || '']"
+                  style="width: 100%"
+                  type="text"
+                  @keyup.enter="search(1)"
+                />
+              </template>
+              <!---->
+              <!--单选/多选-->
+              <template
+                v-else-if="SELECT_TYPES.includes(column.type as string)"
+              >
+                <el-select
+                  v-model="proxys[column.prop || '']"
+                  style="width: 100%"
+                  :multiple="column.multiple || column.type === 'checkbox'"
+                  :clearable="column.clearable"
+                >
+                  <el-option
+                    v-for="(dicItem, dicIndex) in column.dicData || []"
+                    :key="dicIndex"
+                    :label="dicItem.label"
+                    :value="dicItem.value"
+                  />
+                </el-select>
+              </template>
+              <!---->
+              <!--时间选择-->
+              <template v-else-if="DATE_TYPES.includes(column.type as string)">
+                <el-date-picker
+                  v-if="column.type !== 'time' && column.type !== 'timerange'"
+                  v-model="proxys[column.prop || '']"
+                  :type="column.type"
+                  :clearable="column.clearable"
+                  :start-placeholder="column.startPlaceholder"
+                  :end-placeholder="column.endPlaceholder"
+                  :format="column.format"
+                  :value-format="
+                    column.valueFormat || getValueFormatByType(column.type)
+                  "
+                />
+                <el-time-picker
+                  v-else
+                  v-model="proxys[column.prop || '']"
+                  :is-range="column.type === 'timerange'"
+                  :clearable="column.clearable"
+                  :start-placeholder="column.startPlaceholder"
+                  :end-placeholder="column.endPlaceholder"
+                  :value-format="
+                    column.valueFormat || getValueFormatByType(column.type)
+                  "
+                />
+              </template>
+            </el-form-item>
+          </el-col>
+        </template>
+        <el-col :span="6">
+          <el-form-item class="m-search-btns" style="width: 100%">
+            <el-button
+              type="primary"
+              :icon="searchOption.searchBtnIcon"
+              :loading="loading"
+              @click="search(1)"
+            >
+              {{ searchOption.searchBtnText }}
+            </el-button>
+            <el-button
+              type="default"
+              :icon="searchOption.resetBtnIcon"
+              :loading="loading"
+              @click="reset"
+            >
+              {{ searchOption.resetBtnText }}
+            </el-button>
+            <el-link
+              v-if="searchOption.col"
+              style="width: 54px; margin-left: 12px"
+              :underline="false"
+              :disabled="loading"
+              type="default"
+              @click="toggleCol"
+            >
+              <el-icon style="margin-right: 6px">
+                <ArrowDown v-if="searchCol" />
+                <ArrowUp v-else />
+              </el-icon>
+              {{ searchCol ? t('m.search.expandBtn') : t('m.search.colBtn') }}
+            </el-link>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+  </div>
+</template>

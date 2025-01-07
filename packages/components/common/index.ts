@@ -15,7 +15,9 @@ export type DateTypes =
   | 'datetimerange'
   | 'daterange'
   | 'monthrange'
+  | 'yearrange'
   | 'time'
+  | 'timerange'
 
 /**
  * @description column类型
@@ -74,6 +76,32 @@ export interface IDict {
   dicFormatter?: (res: any) => { list: any[]; label: string; value: string }
 }
 
+/**
+ * 时间列相关配置
+ */
+export interface IDateColumn {
+  /**
+   * @description 可清空
+   */
+  clearable?: boolean
+  /**
+   * @description 范围选择时开始日期的占位内容
+   */
+  startPlaceholder?: string
+  /**
+   * @description 范围选择时结束日期的占位内容
+   */
+  endPlaceholder?: string
+  /**
+   * @description 显示在输入框中的格式，默认 YYYY-MM-DD/YYYY-MM-DD HH:mm:ss
+   */
+  format?: string
+  /**
+   * @description 绑定值的格式，默认Date对象
+   */
+  valueFormat?: string
+}
+
 export interface ISelectColumn {
   /**
    * @description 是否多选
@@ -130,7 +158,11 @@ export interface IPictureColumn {
   imgSuffix?: string
 }
 
-export interface ICommonColumn extends IDict, ISelectColumn, IPictureColumn {
+export interface ICommonColumn
+  extends IDict,
+    ISelectColumn,
+    IPictureColumn,
+    IDateColumn {
   /**
    * @description 列标题
    */

@@ -9,5 +9,11 @@ export default {
       cancelText: 'Cancel',
       confirmText: 'Confirm',
     },
+    search: {
+      searchBtnText: 'Search',
+      resetBtnText: 'Reset',
+      expandBtn: 'Expand',
+      colBtn: 'Collapse',
+    },
   },
 }

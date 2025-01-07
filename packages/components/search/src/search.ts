@@ -1,6 +1,6 @@
 import { ICommonColumn } from '@m-eleplus-crud/components/common'
 import { useSizeProp } from '@m-eleplus-crud/hooks'
-import { buildProps, definePropType } from '@m-eleplus-crud/utils'
+import { buildProps, definePropType, isObject } from '@m-eleplus-crud/utils'
 
 import { ColumnType } from '../../common'
 import type { ExtractPropTypes } from 'vue'
@@ -48,6 +48,22 @@ export interface ISearchColumn extends ICommonColumn {
  * @description 搜索信息配置
  */
 export interface ISearchOption {
+  /**
+   * @description 搜索按钮文本
+   */
+  searchBtnText?: string
+  /**
+   * @description 重置按钮文本
+   */
+  resetBtnText?: string
+  /**
+   * @description 搜索按钮icon
+   */
+  searchBtnIcon?: string
+  /**
+   * @description 重置按钮icon
+   */
+  resetBtnIcon?: string
   /**
    * @description label宽度
    */
@@ -97,10 +113,22 @@ export const searchProps = buildProps({
    */
   option: {
     type: definePropType<ISearchOption>(Object),
-    required: true,
+    required: false,
   },
 } as const)
 export type SearchProps = ExtractPropTypes<typeof searchProps>
 
-export const searchEmits = {}
+export const searchEmits = {
+  /**
+   * 搜索
+   * @param model 搜索表单数据
+   * @returns
+   */
+  search: (model: any) => isObject(model),
+  /**
+   * 重置
+   * @returns
+   */
+  reset: () => true,
+}
 export type SearchEmits = typeof searchEmits

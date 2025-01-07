@@ -4,6 +4,7 @@ import { ref } from 'vue';
 const searchForm = ref<any>({})
 
 const searchOption = ref<any>({
+  col: true,
   column: [
     {
       label: '姓名',
@@ -16,6 +17,7 @@ const searchOption = ref<any>({
       label: "性别",
       prop: "sex",
       type: 'select',
+      order: 1,
       dicData: [
         {
           label: '男',
@@ -59,6 +61,16 @@ const searchOption = ref<any>({
         testHeader: '1'
       },
       dicFormatter: (res: any) => ({list: res.data, label: '{label}-{value}', value: 'value'})
+    },
+    {
+      label: "创建时间",
+      prop: "createTime",
+      type: 'datetimerange',
+    },
+    {
+      label: "发放日期",
+      prop: "sendTime",
+      type: 'daterange',
     }
   ]
 })
