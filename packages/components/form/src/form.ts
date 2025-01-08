@@ -5,15 +5,18 @@ import type {
   ColumnType,
   ICommonColumn,
 } from '@m-eleplus-crud/components/common'
-import type { FormRules } from 'element-plus'
+import type { FormItemRule } from 'element-plus'
 
 import type { ExtractPropTypes } from 'vue'
 
-export interface IFormColumn extends ICommonColumn {
+/**
+ * @description 公开的form column配置
+ */
+export interface IFormCommonColumn {
   /**
    * 表单校验规则
    */
-  rules?: FormRules[]
+  rules?: FormItemRule[]
   /**
    * @description 单个标签宽度
    */
@@ -46,21 +49,30 @@ export interface IFormColumn extends ICommonColumn {
    * @description 占位文本
    */
   placeholder?: string
+}
+
+export interface IFormColumn extends ICommonColumn, IFormCommonColumn {
   /**
    * @description 组件类型
    */
   type?: ColumnType
 }
 
-export interface IFormOption {
+/**
+ * @description 公开的form配置
+ */
+export interface IFormCommonOption {
   /**
    * @description 标签宽度
    */
   labelWidth?: string
+}
+
+export interface IFormOption extends IFormCommonOption {
   /**
    * @description 表单列
    */
-  column?: IFormColumn[]
+  column: IFormColumn[]
 }
 
 export const formProps = buildProps({

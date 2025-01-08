@@ -7,9 +7,9 @@ import type { ExtractPropTypes } from 'vue'
 import type { FormItemRule } from 'element-plus'
 
 /**
- * @description 搜索列配置
+ * @description 公开的search column配置
  */
-export interface ISearchColumn extends ICommonColumn {
+export interface ISearchCommonColumn {
   /**
    * @description label宽度
    */
@@ -38,6 +38,12 @@ export interface ISearchColumn extends ICommonColumn {
    * @description 输入框占位文本
    */
   placeholder?: string
+}
+
+/**
+ * @description 搜索列配置
+ */
+export interface ISearchColumn extends ICommonColumn, ISearchCommonColumn {
   /**
    * @description 类型
    */
@@ -45,9 +51,9 @@ export interface ISearchColumn extends ICommonColumn {
 }
 
 /**
- * @description 搜索信息配置
+ * @description 公开的search配置
  */
-export interface ISearchOption {
+export interface ISearchCommonOption {
   /**
    * @description 搜索按钮文本
    */
@@ -76,10 +82,16 @@ export interface ISearchOption {
    * @description 是否开启收缩
    */
   col?: boolean
+}
+
+/**
+ * @description 搜索信息配置
+ */
+export interface ISearchOption extends ISearchCommonOption {
   /**
    * @description 搜索列配置
    */
-  column?: ISearchColumn[]
+  column: ISearchColumn[]
 }
 
 export const searchProps = buildProps({

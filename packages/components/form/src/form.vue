@@ -14,7 +14,7 @@ defineOptions({
 })
 
 const props = defineProps(formProps)
-const emit = defineEmits(formEmits)
+defineEmits(formEmits)
 
 // 插槽信息
 const slots = useSlots() as any
@@ -70,7 +70,6 @@ const proxys = new Proxy(props.model, {
     return true
   },
 })
-console.log(props, emit)
 
 /**
  * @description 初始化表单的值
@@ -247,6 +246,27 @@ const formatDicValue = (row: any, column: IFormColumn) => {
   return dictLabel
 }
 
+/**
+ * @description 校验表单
+ */
+const validForm = (): Promise<boolean> => {
+  return new Promise((resolve) => {
+    formRef.value!.validate((valid) => {
+      resolve(valid)
+    })
+  })
+}
+
+/**
+ * @description 清空数据和校验规则
+ */
+const clear = () => {
+  // 清空校验规则
+  formRef.value?.clearValidate()
+  // 清空表单数据
+  formRef.value?.resetFields()
+}
+
 watch(
   () => props.option as IFormOption,
   (newVal: IFormOption) => {
@@ -274,6 +294,17 @@ watch(
     deep: true,
   }
 )
+
+defineExpose({
+  /**
+   * @description 校验表单
+   */
+  validForm,
+  /**
+   * @description 清空表单
+   */
+  clear,
+})
 </script>
 
 <template>

@@ -5,7 +5,10 @@ import { ColumnType, ICommonColumn } from '../../common'
 
 import type { ExtractPropTypes, VNode } from 'vue'
 
-export interface ITableColumn extends ICommonColumn {
+/**
+ * @description 公开的table column配置
+ */
+export interface ITableCommonColumn {
   /**
    * @description 对齐方式
    */
@@ -26,10 +29,6 @@ export interface ITableColumn extends ICommonColumn {
    * @returns
    */
   formatter?: (row: any, column: ITableColumn, index: number) => VNode | string
-  /**
-   * @description 类型
-   */
-  type?: ColumnType | 'index' | 'single' | 'selection'
   /**
    * @description 列宽度
    */
@@ -52,7 +51,17 @@ export interface ITableColumn extends ICommonColumn {
   barcodeHeight?: number
 }
 
-export interface ITableOption {
+export interface ITableColumn extends ICommonColumn, ITableCommonColumn {
+  /**
+   * @description 类型
+   */
+  type?: ColumnType | 'index' | 'single' | 'selection'
+}
+
+/**
+ * @description 公开的table配置
+ */
+export interface ITableCommonOption {
   /**
    * @description 是否显示操作栏
    */
@@ -81,10 +90,13 @@ export interface ITableOption {
    * @description 操作栏标题名称
    */
   menuTitle?: string
+}
+
+export interface ITableOption extends ITableCommonOption {
   /**
    * @description 列配置
    */
-  column?: ITableColumn[]
+  column: ITableColumn[]
 }
 
 export const tableProps = buildProps({
