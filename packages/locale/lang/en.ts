@@ -15,5 +15,11 @@ export default {
       expandBtn: 'Expand',
       colBtn: 'Collapse',
     },
+    crud: {
+      addBtnText: 'Add',
+      addDialogTitle: 'Add',
+      editDialogTitle: 'Edit',
+      viewDialogTitle: 'View',
+    },
   },
 }

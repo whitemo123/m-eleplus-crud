@@ -1,4 +1,9 @@
-import { buildProps, definePropType } from '@m-eleplus-crud/utils'
+import {
+  buildProps,
+  definePropType,
+  isArray,
+  isObject,
+} from '@m-eleplus-crud/utils'
 import { useSizeProp } from '@m-eleplus-crud/hooks'
 import type { ExtractPropTypes } from 'vue'
 import type {
@@ -51,6 +56,22 @@ export interface ICrudColumn
    * @description 表单校验规则
    */
   formRules?: FormItemRule[]
+  /**
+   * @description 列表是否显示
+   */
+  hide?: boolean
+  /**
+   * @description 新增对话框是否显示
+   */
+  addHide?: boolean
+  /**
+   * @description 查看对话框是否显示
+   */
+  viewHide?: boolean
+  /**
+   * @description 编辑对话框是否显示
+   */
+  editHide?: boolean
 }
 
 /**
@@ -187,5 +208,18 @@ export const crudProps = buildProps({
 } as const)
 export type CrudProps = ExtractPropTypes<typeof crudProps>
 
-export const crudEmits = {}
+export const crudEmits = {
+  /**
+   * @description 更新选择数据
+   * @param arr 选择的数据
+   * @returns
+   */
+  'update:select': (arr: any[]) => isArray(arr),
+  /**
+   * @description 更新表单数据
+   * @param value  表单数据
+   * @returns
+   */
+  'update:modelValue': (value: any) => isObject(value),
+}
 export type CrudEmits = typeof crudEmits

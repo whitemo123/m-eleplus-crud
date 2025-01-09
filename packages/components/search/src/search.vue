@@ -329,6 +329,7 @@ defineExpose({
               >
                 <el-input
                   v-model.trim="proxys[column.prop || '']"
+                  :placeholder="column.placeholder"
                   style="width: 100%"
                   type="text"
                   @keyup.enter="search(1)"
@@ -342,6 +343,7 @@ defineExpose({
                 <el-select
                   v-model="proxys[column.prop || '']"
                   style="width: 100%"
+                  :placeholder="column.placeholder"
                   :multiple="column.multiple || column.type === 'checkbox'"
                   :clearable="column.clearable"
                 >

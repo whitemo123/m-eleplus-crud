@@ -24,7 +24,7 @@
             :loading="dialogLoading"
             @click="close"
           >
-            {{ t('m.dialog.cancelText') }}
+            {{ cancelBtnText || t('m.dialog.cancelText') }}
           </el-button>
           <el-button
             v-if="saveBtn"
@@ -34,7 +34,7 @@
             type="primary"
             @click="enter"
           >
-            {{ t('m.dialog.confirmText') }}
+            {{ saveBtnText || t('m.dialog.confirmText') }}
           </el-button>
         </div>
         <slot v-else :loading="dialogLoading" name="btns" />

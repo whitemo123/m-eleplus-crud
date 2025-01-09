@@ -15,5 +15,11 @@ export default {
       expandBtn: '展 开',
       colBtn: '收 缩',
     },
+    crud: {
+      addBtnText: '新 增',
+      addDialogTitle: '新增',
+      editDialogTitle: '编辑',
+      viewDialogTitle: '查看',
+    },
   },
 }
