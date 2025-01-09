@@ -10,6 +10,7 @@ declare module 'vue' {
     MBarcode: typeof import('m-eleplus-crud')['MBarcode']
     MForm: typeof import('m-eleplus-crud')['MForm']
     MCrud: typeof import('m-eleplus-crud')['MCrud']
+    MPagination: typeof import('m-eleplus-crud')['MPagination']
   }
 }
 

@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { computed, ref, useSlots, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, useSlots, watch } from 'vue'
 import { cloneDeep, get, set } from 'lodash-unified'
 import { useGlobalConfig } from '@m-eleplus-crud/components'
 import { useLocale } from '@m-eleplus-crud/hooks'
 import { crudEmits, crudProps } from './crud'
-import type { ITableColumn, ITableOption } from '../../table'
+import type { ISearchColumn, ISearchOption, SearchInstance } from '../../search'
+import type { ITableColumn, ITableOption, TableInstance } from '../../table'
 import type { ICrudColumn, ICrudOption } from './crud'
-import type { ISearchColumn, ISearchOption } from '../../search'
-import type { IFormColumn, IFormOption } from '../../form'
+import type { FormInstance, IFormOption } from '../../form'
 
 const COMPONENT_NAME = 'MCrud'
 defineOptions({
@@ -95,9 +95,29 @@ const crudOption = ref<ICrudOption>({
 const dialogType = ref<'add' | 'edit' | 'view'>('add')
 
 /**
+ * @description 搜索ref
+ */
+const searchRef = ref<SearchInstance>()
+
+/**
+ * @description 表单ref
+ */
+const formRef = ref<FormInstance>()
+
+/**
+ * @description 表格ref
+ */
+const tableRef = ref<TableInstance>()
+
+/**
  * @description 对话框显示状态
  */
 const dialogVisible = ref(false)
+
+/**
+ * @description 表格高度
+ */
+const tableHeight = ref<any>(undefined)
 
 /**
  * @description 对话框标题
@@ -211,6 +231,46 @@ const transSearchColumn = (column: ICrudColumn): ISearchColumn => {
 }
 
 /**
+ * @description 当前页发生改变
+ */
+const currentPageChange = (page: number) => {
+  searchRef.value?.search(page)
+}
+
+/**
+ * @description 页大小发生变化
+ */
+const pageSizeChange = (pageSize: number) => {
+  searchProxys.limit = pageSize
+  searchRef.value?.search()
+}
+
+/**
+ * @description 获取表格高度
+ */
+const setTableHeight = () => {
+  nextTick(() => {
+    // 自动高度
+    if (crudOption.value.height === 'auto') {
+      // 表格style对象
+      const tableStyle = tableRef.value?.$el
+      // 分页对象
+      const pageStyle: any = document.querySelector('.m-pagination-box')
+      // 额外可控制高度参数
+      const calcHeight: number =
+        crudOption.value.calcHeight || globalConfig.value?.calcHeight || 0
+      tableHeight.value =
+        document.documentElement.clientHeight -
+        (tableStyle?.offsetTop || 0) -
+        (pageStyle?.offsetHeight || 0) -
+        calcHeight
+    } else {
+      tableHeight.value = crudOption.value.height
+    }
+  })
+}
+
+/**
  * 打开新增对话框
  */
 const rowAdd = () => {
@@ -218,6 +278,11 @@ const rowAdd = () => {
   dialogVisible.value = true
 }
 
+/**
+ * 对话框确认事件
+ * @param done 完成
+ * @param loading 结束加载
+ */
 const dialogEnter = (done: () => void, loading: () => void) => {}
 
 watch(
@@ -251,11 +316,19 @@ watch(
     deep: true,
   }
 )
+
+onMounted(() => {
+  // 设置表格高度
+  if (crudOption.value.height) {
+    setTableHeight()
+  }
+})
 </script>
 
 <template>
   <div class="m-crud">
     <MSearch
+      ref="searchRef"
       :model="searchProxys"
       :option="searchOption"
       :size="size || globalConfig.size"
@@ -293,12 +366,15 @@ watch(
     <!---->
     <!--表格-->
     <MTable
+      ref="tableRef"
       v-model:select="selectData"
       :data="data"
       :size="size || globalConfig.size"
       :loading="loading"
       :permission="permission"
       :option="tableOption"
+      :height="tableHeight"
+      :max-height="tableHeight"
     >
       <!-- 列表插槽 -->
       <template
@@ -311,7 +387,18 @@ watch(
       <!---->
     </MTable>
     <!---->
-
+    <!--分页区域-->
+    <div v-if="searchProxys.page && total" class="m-pagination-box">
+      <m-pagination
+        :small="(size || globalConfig.size) === 'small'"
+        :total="total"
+        :current-page="searchProxys.page"
+        :page-size="searchProxys.limit"
+        :disabled="loading"
+        @current-page="currentPageChange"
+        @page-size="pageSizeChange"
+      />
+    </div>
     <!--新增/编辑/查看对话框-->
     <MDialog
       v-model="dialogVisible"
@@ -358,6 +445,7 @@ watch(
         />
         <!---->
         <MForm
+          ref="formRef"
           :loading="loading"
           :size="size || globalConfig.size"
           :option="formOption"

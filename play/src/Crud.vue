@@ -4,10 +4,10 @@ import { ref } from 'vue'
 const modelForm = ref<any>({})
 
 const tableData = ref<any>([
-  {
-    id: '124545785441457845',
-    nickName: '刘大成'
-  }
+  // {
+  //   id: '124545785441457845',
+  //   nickName: '刘大成'
+  // }
 ])
 
 const total = ref(1)
@@ -18,6 +18,7 @@ const query = ref<any>({
 })
 
 const crudOption = ref<any>({
+  height: 'auto',
   column: [
     {
       label: "ID",
@@ -32,7 +33,8 @@ const crudOption = ref<any>({
           message: '请输入ID',
           trigger: 'blur'
         }
-      ]
+      ],
+      addHide: true
     },
     {
       label: "昵称",
@@ -61,3 +63,8 @@ const crudOption = ref<any>({
     </MCrud>
   </div>
 </template>
+
+
+<style lang="scss" scoped>
+
+</style>

@@ -139,6 +139,20 @@ export const tableProps = buildProps({
     type: Object,
     default: {},
   },
+  /**
+   * @description 表格高度
+   */
+  height: {
+    type: Number,
+    required: false,
+  },
+  /**
+   * @description 表格最大高度
+   */
+  maxHeight: {
+    type: Number,
+    required: false,
+  },
 } as const)
 
 export type TableProps = ExtractPropTypes<typeof tableProps>

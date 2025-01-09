@@ -126,6 +126,10 @@ export interface ICrudOption
    */
   maxHeight?: string
   /**
+   * @description 表格高度调节(px)
+   */
+  calcHeight?: number
+  /**
    * @description crud列配置
    */
   column: ICrudColumn[]

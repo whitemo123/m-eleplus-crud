@@ -18,6 +18,13 @@ export const configProviderProps = buildProps({
    */
   size: useSizeProp,
   /**
+   * @description 表格高度调节(px)
+   */
+  calcHeight: {
+    type: Number,
+    required: false,
+  },
+  /**
    * @description 外部传递的http get请求函数
    */
   httpGet: {
