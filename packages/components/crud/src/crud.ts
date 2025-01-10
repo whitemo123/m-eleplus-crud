@@ -72,6 +72,26 @@ export interface ICrudColumn
    * @description 编辑对话框是否显示
    */
   editHide?: boolean
+  /**
+   * @description 搜索项框栅列
+   */
+  searchSpan?: number
+  /**
+   * @description 新增项框栅列
+   */
+  addSpan?: number
+  /**
+   * @description 编辑项框栅列
+   */
+  editSpan?: number
+  /**
+   * @description 查看项框栅列
+   */
+  viewSpan?: number
+  /**
+   * @description 表单项框栅列
+   */
+  formSpan?: number
 }
 
 /**
@@ -85,6 +105,14 @@ export interface ICrudOption
    * @description 新增按钮是否需要
    */
   addBtn?: boolean
+  /**
+   * @description 编辑按钮是否需要
+   */
+  editBtn?: boolean
+  /**
+   * @description 删除按钮是否需要
+   */
+  delBtn?: boolean
   /**
    * @description 新增按钮文字
    */

@@ -17,6 +17,8 @@ export default {
     },
     crud: {
       addBtnText: 'Add',
+      editBtnText: 'Edit',
+      delBtnText: 'Delete',
       addDialogTitle: 'Add',
       editDialogTitle: 'Edit',
       viewDialogTitle: 'View',

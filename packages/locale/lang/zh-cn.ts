@@ -17,6 +17,8 @@ export default {
     },
     crud: {
       addBtnText: '新 增',
+      editBtnText: '编辑',
+      delBtnText: '删除',
       addDialogTitle: '新增',
       editDialogTitle: '编辑',
       viewDialogTitle: '查看',

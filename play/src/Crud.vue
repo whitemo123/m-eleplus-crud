@@ -4,10 +4,13 @@ import { ref } from 'vue'
 const modelForm = ref<any>({})
 
 const tableData = ref<any>([
-  // {
-  //   id: '124545785441457845',
-  //   nickName: '刘大成'
-  // }
+  {
+    id: '124545785441457845',
+    nickName: '刘大成',
+    name: '刘大成',
+    age: 18,
+    remark: '撒啊撒娇很久很久不打说不定还是德国撒娇好的vgdhv爱得更多v韩国va韩国v爱韩庚v的萨汗国的v阿达好尬v的安徽的vga的'
+  }
 ])
 
 const total = ref(1)
@@ -19,6 +22,7 @@ const query = ref<any>({
 
 const crudOption = ref<any>({
   height: 'auto',
+  border: true,
   column: [
     {
       label: "ID",
@@ -27,7 +31,7 @@ const crudOption = ref<any>({
       align: 'left',
       search: true,
       searchValue: '123',
-      searchRules: [
+      formRules: [
         {
           required: true,
           message: '请输入ID',
@@ -39,7 +43,30 @@ const crudOption = ref<any>({
     {
       label: "昵称",
       prop: 'nickName',
-    }
+      width: 150,
+      formRules: [
+        {
+          required: true,
+          message: '请输入昵称',
+          trigger: 'blur'
+        }
+      ],
+    },
+    {
+      label: "真名",
+      prop: 'name',
+      width: 150
+    },
+    {
+      label: "年龄",
+      prop: 'age',
+      width: 150
+    },
+    {
+      label: "备注",
+      prop: 'remark',
+      overHidden: true
+    },
   ]
 })
 </script>

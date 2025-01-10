@@ -7,7 +7,7 @@ import { crudEmits, crudProps } from './crud'
 import type { ISearchColumn, ISearchOption, SearchInstance } from '../../search'
 import type { ITableColumn, ITableOption, TableInstance } from '../../table'
 import type { ICrudColumn, ICrudOption } from './crud'
-import type { FormInstance, IFormOption } from '../../form'
+import type { FormInstance, IFormColumn, IFormOption } from '../../form'
 
 const COMPONENT_NAME = 'MCrud'
 defineOptions({
@@ -73,6 +73,10 @@ const tableSlots = computed(() => {
 const crudOption = ref<ICrudOption>({
   // 默认显示添加按钮
   addBtn: true,
+  // 默认显示编辑按钮
+  editBtn: true,
+  // 默认显示删除按钮
+  delBtn: true,
   // 添加按钮文字
   addBtnText: t('m.crud.addBtnText'),
   // 添加按钮图标
@@ -148,6 +152,9 @@ const modelForm = computed({
  * @description table配置项
  */
 const tableOption = ref<ITableOption>({
+  // 默认显示操作栏
+  menu: true,
+
   column: [],
 })
 
@@ -162,28 +169,34 @@ const searchOption = ref<ISearchOption>({
  * @description form配置项
  */
 const formOption = computed<IFormOption>(() => {
-  const option: IFormOption = {
+  let option: IFormOption = {
     column: [],
   }
+  option = transFormOption(
+    Object.assign({}, option, copyObjectExcept(crudOption.value, ['column']))
+  )
   for (let i = 0; i < crudOption.value.column.length; i++) {
     const item = cloneDeep(crudOption.value.column[i])
+    const formColumn: IFormColumn = transFormColumn(item)
+
     if (dialogType.value === 'add') {
       // 新增模式
       if (!item.addHide) {
-        option.column.push(item)
+        option.column.push(formColumn)
       }
     } else if (dialogType.value === 'edit') {
       // 编辑模式
       if (!item.editHide) {
-        option.column.push(item)
+        option.column.push(formColumn)
       }
     } else {
       // 查看模式
       if (!item.viewHide) {
-        option.column.push(item)
+        option.column.push(formColumn)
       }
     }
   }
+
   return option
 })
 
@@ -219,13 +232,117 @@ const selectData = computed({
 const transSearchColumn = (column: ICrudColumn): ISearchColumn => {
   const result: ISearchColumn = cloneDeep(column)
   // 转换排序
-  result.order = column.searchOrder || undefined
+  if (column.searchOrder) {
+    result.order = column.searchOrder
+  } else {
+    delete result.order
+  }
   // 转换默认值
-  result.value = column.searchValue || undefined
+  if (column.value) {
+    result.value = column.searchValue
+  } else {
+    delete result.value
+  }
   // 转换占位符
-  result.placeholder = column.searchPlaceholder || undefined
+  if (column.searchPlaceholder) {
+    result.placeholder = column.searchPlaceholder
+  } else {
+    delete result.placeholder
+  }
   // 转换表单校验规则
-  result.rules = column.searchRules || undefined
+  if (column.searchRules) {
+    result.rules = column.searchRules
+  } else {
+    delete result.rules
+  }
+  // 转换栅格
+  if (column.searchSpan) {
+    result.span = column.searchSpan
+  } else {
+    delete result.span
+  }
+
+  return result
+}
+
+/**
+ * 转换form列
+ * @param column 列配置
+ * @param type 类型
+ */
+const transFormColumn = (column: ICrudColumn): IFormColumn => {
+  const result: IFormColumn = cloneDeep(column)
+  // 转换排序
+  if (column.formOrder) {
+    result.order = column.formOrder
+  } else {
+    delete result.order
+  }
+  // 转换默认值
+  if (column.formValue) {
+    result.value = column.formValue
+  } else {
+    delete result.value
+  }
+  // 转换占位符
+  if (column.formPlaceholder) {
+    result.placeholder = column.formPlaceholder
+  } else {
+    delete result.placeholder
+  }
+  // 转换表单校验规则
+  if (column.formRules) {
+    result.rules = column.formRules
+  } else {
+    delete result.rules
+  }
+  // 转换栅格
+  if (column.formSpan || column.addSpan || column.editSpan || column.viewSpan) {
+    if (column.formSpan) {
+      result.span = column.formSpan
+    }
+    if (dialogType.value === 'add' && column.addSpan) {
+      result.span = column.addSpan
+    } else if (dialogType.value === 'edit' && column.editSpan) {
+      result.span = column.editSpan
+    } else if (dialogType.value === 'view' && column.viewSpan) {
+      result.span = column.viewSpan
+    }
+  } else {
+    delete result.span
+  }
+
+  return result
+}
+
+/**
+ * 转换search option
+ * @param option crud option
+ */
+const transSearchOption = (option: ICrudOption): ISearchOption => {
+  const result: ISearchOption = cloneDeep(option)
+  // 转换labelWidth
+  if (option.searchLabelWidth) {
+    result.labelWidth = option.searchLabelWidth
+  } else {
+    delete result.labelWidth
+  }
+
+  return result
+}
+
+/**
+ * 转换form option
+ * @param option crud option
+ */
+const transFormOption = (option: ICrudOption): IFormOption => {
+  const result: IFormOption = cloneDeep(option)
+  // 转换labelWidth
+  if (option.formLabelWidth) {
+    result.labelWidth = option.formLabelWidth
+  } else {
+    delete result.labelWidth
+  }
 
   return result
 }
@@ -285,12 +402,41 @@ const rowAdd = () => {
  */
 const dialogEnter = (done: () => void, loading: () => void) => {}
 
+/**
+ * 复制对象到新对象，排除指定key
+ * @param sourceObj 源对象
+ * @param excludeKeys 排除的key
+ */
+const copyObjectExcept = (sourceObj: any, excludeKeys: string[] = []) => {
+  const result: any = {}
+  Object.keys(sourceObj).forEach((key) => {
+    if (!excludeKeys.includes(key)) {
+      result[key] = sourceObj[key]
+    }
+  })
+  return result
+}
+
 watch(
   () => props.option as ICrudOption,
   (newVal: ICrudOption) => {
     if (newVal) {
       // crud配置项
       crudOption.value = Object.assign({}, crudOption.value, newVal)
+      // table配置项
+      tableOption.value = Object.assign(
+        {},
+        tableOption.value,
+        copyObjectExcept(crudOption.value, ['column'])
+      )
+      // search配置项
+      searchOption.value = transSearchOption(
+        Object.assign(
+          {},
+          searchOption.value,
+          copyObjectExcept(crudOption.value, ['column'])
+        )
+      )
 
       const searchColumns: ISearchColumn[] = []
       const tableColumns: ITableColumn[] = []
@@ -383,6 +529,40 @@ onMounted(() => {
         #[slotKey]="scope"
       >
         <slot :name="slotKey" v-bind="scope" />
+      </template>
+      <!---->
+      <!--操作栏-->
+      <template #menu="scope">
+        <el-link
+          v-if="crudOption.editBtn && !slots.editBtn"
+          class="m-control-btns"
+          type="primary"
+          :size="size || globalConfig.size"
+          :underline="false"
+          icon="Edit"
+        >
+          {{ t('m.crud.editBtnText') }}
+        </el-link>
+        <slot
+          v-if="crudOption.editBtn && slots.editBtn"
+          name="editBtn"
+          v-bind="scope"
+        />
+        <el-link
+          v-if="crudOption.delBtn && !slots.delBtn"
+          class="m-control-btns"
+          type="primary"
+          :underline="false"
+          :size="size || globalConfig.size"
+          icon="Delete"
+        >
+          {{ t('m.crud.delBtnText') }}
+        </el-link>
+        <slot
+          v-if="crudOption.delBtn && slots.delBtn"
+          name="delBtn"
+          v-bind="scope"
+        />
       </template>
       <!---->
     </MTable>

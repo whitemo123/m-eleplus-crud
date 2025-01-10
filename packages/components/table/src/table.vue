@@ -354,6 +354,8 @@ defineExpose({
       :data="data"
       :height="props.height"
       :max-height="props.maxHeight"
+      :border="tableOption.border"
+      :stripe="tableOption.stripe"
       @selection-change="selectionChange"
     >
       <template #empty>
@@ -452,6 +454,7 @@ defineExpose({
       <!--操作栏-->
       <el-table-column
         v-if="tableOption.menu"
+        :width="tableOption.menuWidth"
         :label="tableOption.menuTitle || t('m.table.menuTitle')"
         align="center"
       >

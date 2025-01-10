@@ -1,3 +1,13 @@
+.dark {
+  .el-table {
+    .el-table__header {
+      th.el-table__cell {
+        background-color: var(--el-bg-color);
+        color: var(--el-table-header-text-color);
+      }
+    }
+  }
+}
 .m-table {
   // 清除单选模式下的单选空格
   .table-radio {
@@ -50,4 +60,14 @@
   color: #333;
   margin: 10px auto;
   text-align: center;
+}
+
+.m-control-btns {
+  margin-left: 10px;
+  &:first-child {
+    margin-left: 0;
+  }
+  .el-link__inner {
+    margin-left: 5px;
+  }
 }
