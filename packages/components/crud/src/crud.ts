@@ -2,7 +2,10 @@ import {
   buildProps,
   definePropType,
   isArray,
+  isFunction,
+  isNumber,
   isObject,
+  isString,
 } from '@m-eleplus-crud/utils'
 import { useSizeProp } from '@m-eleplus-crud/hooks'
 import type { ExtractPropTypes } from 'vue'
@@ -253,5 +256,41 @@ export const crudEmits = {
    * @returns
    */
   'update:modelValue': (value: any) => isObject(value),
+  /**
+   * 新增
+   * @param form 表单数据
+   * @param done 完成
+   * @param loading 加载
+   * @returns
+   */
+  rowSave: (form: any, done: () => void, loading: () => void) =>
+    isObject(form) && isFunction(done) && isFunction(loading),
+  /**
+   * 编辑
+   * @param form 表单数据
+   * @param done 完成
+   * @param loading 加载
+   * @returns
+   */
+  rowEdit: (form: any, done: () => void, loading: () => void) =>
+    isObject(form) && isFunction(done) && isFunction(loading),
+
+  /**
+   * 取消
+   * @param form 表单数据
+   * @param index 索引
+   * @param type 类型
+   * @returns
+   */
+  rowCancel: (form: any, index: number, type: 'add' | 'edit' | 'view') =>
+    isObject(form) && isNumber(index) && isString(type),
+
+  /**
+   * 删除
+   * @param row 行数据
+   * @param index 索引
+   * @returns
+   */
+  rowDel: (row: any, index: number) => isObject(row) && isNumber(index),
 }
 export type CrudEmits = typeof crudEmits

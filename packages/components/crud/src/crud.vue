@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, nextTick, onMounted, ref, useSlots, watch } from 'vue'
+import { ElMessageBox } from 'element-plus'
 import { cloneDeep, get, set } from 'lodash-unified'
 import { useGlobalConfig } from '@m-eleplus-crud/components'
 import { useLocale } from '@m-eleplus-crud/hooks'
@@ -122,6 +123,12 @@ const dialogVisible = ref(false)
  * @description 表格高度
  */
 const tableHeight = ref<any>(undefined)
+
+// 备份modelForm
+const _modelForm = ref<any>()
+
+// 备份列表index
+const _rowIndex = ref(-1)
 
 /**
  * @description 对话框标题
@@ -396,11 +403,96 @@ const rowAdd = () => {
 }
 
 /**
+ * @description 打开编辑修改
+ */
+const rowEdit = (row: any, index: number) => {
+  // 备份数据
+  _modelForm.value = cloneDeep(row)
+  _rowIndex.value = index
+
+  // 弹窗类型
+  dialogType.value = 'edit'
+  modelForm.value = cloneDeep(row)
+  // 弹窗状态
+  dialogVisible.value = true
+}
+
+/**
+ * @description 打开详情
+ */
+const rowView = (row: any, index: number) => {
+  // 备份数据
+  _modelForm.value = cloneDeep(row)
+  _rowIndex.value = index
+
+  // 弹窗类型
+  dialogType.value = 'view'
+  modelForm.value = cloneDeep(row)
+  // 弹窗状态
+  dialogVisible.value = true
+}
+
+/**
+ * @description 打开删除
+ */
+const rowDel = (row: any, index: number) => {
+  ElMessageBox.confirm('此操作将删除该数据, 是否继续?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(() => {
+      emit('rowDel', row, index)
+    })
+    .catch(() => {})
+}
+
+/**
  * 对话框确认事件
  * @param done 完成
  * @param loading 结束加载
  */
-const dialogEnter = (done: () => void, loading: () => void) => {}
+const dialogEnter = async (done: () => void, loading: () => void) => {
+  const valid = await formRef.value!.validForm()
+  // 校验不通过
+  if (!valid) {
+    loading()
+    return
+  }
+
+  // 表单前校验
+  if (props.beforeEnter && !(await props.beforeEnter())) {
+    loading()
+    return
+  }
+
+  if (dialogType.value === 'add') {
+    // 新增
+    emit('rowSave', modelForm.value, done, loading)
+  } else if (dialogType.value === 'edit') {
+    // 修改
+    emit('rowEdit', modelForm.value, done, loading)
+  }
+}
+
+const dialogCancel = () => {
+  emit('rowCancel', _modelForm.value, _rowIndex.value, dialogType.value)
+}
+
+/**
+ * @description 弹窗关闭
+ */
+const dialogClose = () => {
+  // 清空备份
+  _modelForm.value = null
+  _rowIndex.value = -1
+
+  if (formRef.value) {
+    formRef.value.clear()
+  } else {
+    emit('update:modelValue', {})
+  }
+}
 
 /**
  * 复制对象到新对象，排除指定key
@@ -468,6 +560,21 @@ onMounted(() => {
   if (crudOption.value.height) {
     setTableHeight()
   }
+})
+
+defineExpose({
+  /**
+   * @description 新增
+   */
+  rowAdd,
+  /**
+   * @description 编辑
+   */
+  rowEdit,
+  /**
+   * @description 查看
+   */
+  rowView,
 })
 </script>
 
@@ -540,6 +647,7 @@ onMounted(() => {
           :size="size || globalConfig.size"
           :underline="false"
           icon="Edit"
+          @click="rowEdit(scope.row, scope.$index)"
         >
           {{ t('m.crud.editBtnText') }}
         </el-link>
@@ -555,6 +663,7 @@ onMounted(() => {
           :underline="false"
           :size="size || globalConfig.size"
           icon="Delete"
+          @click="rowDel(scope.row, scope.$index)"
         >
           {{ t('m.crud.delBtnText') }}
         </el-link>
@@ -588,6 +697,8 @@ onMounted(() => {
       :save-btn="dialogType !== 'view'"
       :cancel-btn="dialogType !== 'view'"
       @enter="dialogEnter"
+      @cancel="dialogCancel"
+      @close="dialogClose"
     >
       <template #default="{ loading }">
         <!--所有类型顶部-->
