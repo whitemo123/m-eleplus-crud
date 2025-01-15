@@ -97,6 +97,7 @@
     "type-fest": "^2.14.0",
     "typescript": "~5.5.4",
     "unplugin-vue-macros": "^2.7.11",
+    "vitepress": "^1.2.3",
     "vue": "^3.2.37",
     "vue-router": "^4.0.16",
     "vue-tsc": "^2.0.28"

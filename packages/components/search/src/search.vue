@@ -191,7 +191,8 @@ const toggleCol = () => {
  * 处理需要远程获取字典的配置
  */
 const getAllRemoteDics = () => {
-  if (!globalConfig.value?.httpGet) {
+  const hasDicUrl = searchOption.value?.column?.some((column) => column.dicUrl)
+  if (hasDicUrl && !globalConfig.value?.httpGet) {
     debugWarn('MSearch', 'global config httpGet is null')
     return
   }

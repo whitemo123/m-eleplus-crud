@@ -8,6 +8,7 @@ import {
   isString,
 } from '@m-eleplus-crud/utils'
 import { useSizeProp } from '@m-eleplus-crud/hooks'
+import { ColumnType } from '@m-eleplus-crud/components/common'
 import type { ExtractPropTypes } from 'vue'
 import type {
   IFormCommonColumn,
@@ -19,7 +20,7 @@ import type {
 } from '@m-eleplus-crud/m-eleplus-crud'
 import type { FormItemRule } from 'element-plus'
 
-export interface ICrudColumn
+export interface ICrudCommonColumn
   extends ITableCommonColumn,
     IFormCommonColumn,
     ISearchCommonColumn {
@@ -95,6 +96,10 @@ export interface ICrudColumn
    * @description 表单项框栅列
    */
   formSpan?: number
+}
+
+export interface ICrudColumn extends ICrudCommonColumn {
+  type?: ColumnType | 'index' | 'single' | 'selection'
 }
 
 /**

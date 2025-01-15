@@ -186,6 +186,10 @@ const formOption = computed<IFormOption>(() => {
     const item = cloneDeep(crudOption.value.column[i])
     const formColumn: IFormColumn = transFormColumn(item)
 
+    if (['index', 'single', 'selection'].includes(item.type || '')) {
+      continue
+    }
+
     if (dialogType.value === 'add') {
       // 新增模式
       if (!item.addHide) {
@@ -237,7 +241,7 @@ const selectData = computed({
  * @param option 列配置
  */
 const transSearchColumn = (column: ICrudColumn): ISearchColumn => {
-  const result: ISearchColumn = cloneDeep(column)
+  const result: ISearchColumn = cloneDeep(column) as ISearchColumn
   // 转换排序
   if (column.searchOrder) {
     result.order = column.searchOrder
@@ -278,7 +282,7 @@ const transSearchColumn = (column: ICrudColumn): ISearchColumn => {
  * @param type 类型
  */
 const transFormColumn = (column: ICrudColumn): IFormColumn => {
-  const result: IFormColumn = cloneDeep(column)
+  const result: IFormColumn = cloneDeep(column) as IFormColumn
   // 转换排序
   if (column.formOrder) {
     result.order = column.formOrder
@@ -327,7 +331,7 @@ const transFormColumn = (column: ICrudColumn): IFormColumn => {
  * @param option crud option
  */
 const transSearchOption = (option: ICrudOption): ISearchOption => {
-  const result: ISearchOption = cloneDeep(option)
+  const result: ISearchOption = cloneDeep(option) as ISearchOption
   // 转换labelWidth
   if (option.searchLabelWidth) {
     result.labelWidth = option.searchLabelWidth
@@ -343,7 +347,7 @@ const transSearchOption = (option: ICrudOption): ISearchOption => {
  * @param option crud option
  */
 const transFormOption = (option: ICrudOption): IFormOption => {
-  const result: IFormOption = cloneDeep(option)
+  const result: IFormOption = cloneDeep(option) as IFormOption
   // 转换labelWidth
   if (option.formLabelWidth) {
     result.labelWidth = option.formLabelWidth
@@ -536,7 +540,10 @@ watch(
         for (let i = 0; i < newVal.column.length; i++) {
           const item = newVal.column[i]
           // 处理搜索列
-          if (item.search) {
+          if (
+            item.search &&
+            !['index', 'single', 'selection'].includes(item.type || '')
+          ) {
             searchColumns.push(transSearchColumn(item))
           }
           // 列表

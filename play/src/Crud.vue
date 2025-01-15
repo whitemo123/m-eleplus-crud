@@ -25,6 +25,9 @@ const crudOption = ref<any>({
   border: true,
   column: [
     {
+      type: "index"
+    },
+    {
       label: "ID",
       prop: 'id',
       width: 180,
