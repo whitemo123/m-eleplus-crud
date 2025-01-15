@@ -41,10 +41,12 @@ const tableData = ref([
     sex: 2,
   },
 ])
+
+const selectData = ref<any>([])
 </script>
 
 <template>
   <div style="width: 100%">
-    <MTable :option="tableOption" :data="tableData" />
+    <MTable :option="tableOption" :data="tableData" v-model:select="selectData" />
   </div>
 </template>
