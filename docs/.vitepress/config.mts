@@ -24,6 +24,8 @@ export default defineConfig({
         items: [
           { text: 'Search 查询', link: '/components/search' },
           { text: 'Table 列表', link: '/components/table' },
+          { text: 'Form 表单', link: '/components/form' },
+          { text: 'Crud 增删改查', link: '/components/crud' },
         ],
       },
     ],

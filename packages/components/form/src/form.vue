@@ -247,6 +247,16 @@ const formatDicValue = (row: any, column: IFormColumn) => {
 }
 
 /**
+ * @description 计算描述内容的宽度
+ * @param column 列配置
+ */
+const calcDescContentWidth = (column: IFormColumn) => {
+  return `calc(${((column.span || 12) / 24) * 100}% - ${
+    column.labelWidth || formOption.value.labelWidth
+  })`
+}
+
+/**
  * @description 校验表单
  */
 const validForm = (): Promise<boolean> => {
@@ -331,6 +341,7 @@ defineExpose({
             :label="column.label + ':'"
             :prop="column.prop"
             :rules="column.rules"
+            :label-width="column.labelWidth || formOption.labelWidth"
           >
             <!--插槽信息-->
             <slot
@@ -482,7 +493,7 @@ defineExpose({
     </el-form>
     <!---->
     <!--详情模式-->
-    <el-descriptions
+    <!-- <el-descriptions
       v-else
       :size="size || globalConfig.size"
       :column="24"
@@ -494,18 +505,39 @@ defineExpose({
         :key="index"
         :label="item.label"
         :span="item.span || 12"
+        :label-width="item.labelWidth || formOption.labelWidth"
+        :width="calcDescContentWidth(item)"
       >
         <template v-if="item.type === 'picture'">
-          <!--图片插槽-->
         </template>
         <template v-else-if="NEED_DIC_TYPE.includes(item.type || '')">
           {{ formatDicValue(proxys, item) }}
         </template>
         <template v-else>
           {{ proxys[item.prop || ''] }}
+          {{ calcDescContentWidth(item) }}
         </template>
       </el-descriptions-item>
-    </el-descriptions>
-    <!---->
+    </el-descriptions> -->
+    <el-row v-else :gutter="0">
+      <el-col
+        v-for="(column, index) in formOption.column"
+        :key="index"
+        :span="column.span || 12"
+      >
+        <div class="detail-item">
+          <div class="detail-label">{{ column.prop }}</div>
+          <div class="detail-content">
+            <template v-if="column.type === 'picture'" />
+            <template v-else-if="NEED_DIC_TYPE.includes(column.type || '')">
+              {{ formatDicValue(proxys, column) }}
+            </template>
+            <template v-else>
+              {{ proxys[column.prop || ''] }}
+            </template>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>

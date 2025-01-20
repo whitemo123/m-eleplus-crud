@@ -3,6 +3,8 @@ import { ref } from 'vue'
 
 const modelForm = ref<any>({})
 
+const crudRef = ref<any>()
+
 const tableData = ref<any>([
   {
     id: '124545785441457845',
@@ -77,7 +79,7 @@ const crudOption = ref<any>({
 
 <template>
   <div>
-    <MCrud v-model:search="query" v-model="modelForm" :total="total" :data="tableData" :option="crudOption">
+    <MCrud ref="crudRef" v-model:search="query" v-model="modelForm" :total="total" :data="tableData" :option="crudOption">
       <template #topLeft="{size}">
         <el-button :size="size" type="default">导出</el-button>
       </template>
@@ -89,6 +91,9 @@ const crudOption = ref<any>({
       </template>
       <template #nickName="{row, $index}">
         {{ row.nickName }}-{{ $index }}
+      </template>
+      <template #id="{row, $index}">
+        <el-link type="primary" @click="crudRef.rowView(row, $index)" :underline="false">{{ row.id }}</el-link>
       </template>
     </MCrud>
   </div>

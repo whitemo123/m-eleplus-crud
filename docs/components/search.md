@@ -196,6 +196,73 @@ const reset = () => {}
 
 :::
 
+## 自定义搜索插槽
+
+<SearchSlot />
+
+::: details Show Code
+
+```vue
+<script lang="ts" setup>
+import { ref } from 'vue'
+import type { ISearchOption } from 'm-eleplus-crud'
+
+const searchOption = ref<ISearchOption>({
+  column: [
+    {
+      label: '名字',
+      prop: 'name',
+    },
+    {
+      label: '性别',
+      prop: 'sex',
+      type: 'select',
+      dicData: [
+        {
+          label: '男',
+          value: 1,
+        },
+        {
+          label: '女',
+          value: 2,
+        },
+      ],
+    },
+    {
+      label: '生日',
+      prop: 'birthday',
+      type: 'daterange',
+    },
+  ],
+})
+
+const query = ref<any>({})
+
+const search = () => {
+  alert(JSON.stringify(query.value))
+}
+
+const reset = () => {}
+</script>
+
+<template>
+  <div style="width: 100%">
+    <MSearch
+      :option="searchOption"
+      :model="query"
+      @search="search"
+      @reset="reset"
+    >
+      <template #name="{ size, loading }">
+        <span>我是插槽</span>
+      </template>
+    </MSearch>
+  </div>
+</template>
+```
+
+:::
+
 ## Search API
 
 ### Search Attributes
@@ -215,7 +282,7 @@ const reset = () => {}
 | search | 点击搜索按钮 | `(model: any) => void` |
 | reset  | 点击清空按钮 | --                     |
 
-### Search slots
+### Search 插槽
 
 | 名称    | 说明          | 值                |
 | :------ | :------------ | :---------------- |
@@ -232,28 +299,41 @@ const reset = () => {}
 
 #### ISearchOption
 
-| 属性名        | 说明             | 类型      | 默认值 |
-| :------------ | :--------------- | :-------- | :----- |
-| searchBtnText | 搜索按钮文字     | `string`  | 搜 索  |
-| resetBtnText  | 清空按钮文字     | `string`  | 清 空  |
-| searchBtnIcon | 搜索按钮图标     | `string`  | Search |
-| resetBtnIcon  | 清空按钮文字     | `string`  | Delete |
-| labelWidth    | 搜索标签文字宽度 | `string`  | 80px   |
-| colIndex      | 收缩展示个数     | `number`  | 3      |
-| col           | 是否开启收缩     | `boolean` | false  |
+| 属性名        | 说明             | 类型              | 默认值 |
+| :------------ | :--------------- | :---------------- | :----- |
+| searchBtnText | 搜索按钮文字     | `string`          | 搜 索  |
+| resetBtnText  | 清空按钮文字     | `string`          | 清 空  |
+| searchBtnIcon | 搜索按钮图标     | `string`          | Search |
+| resetBtnIcon  | 清空按钮文字     | `string`          | Delete |
+| labelWidth    | 搜索标签文字宽度 | `string`          | 80px   |
+| colIndex      | 收缩展示个数     | `number`          | 3      |
+| col           | 是否开启收缩     | `boolean`         | false  |
+| column        | 配置项           | `ISearchColumn[]` | []     |
 
 #### ISearchColumn
 
-| 属性名      | 说明                                         | 类型             | 默认值 |
-| :---------- | :------------------------------------------- | :--------------- | :----- |
-| labelWidth  | 单个搜索标签文字宽度                         | `string`         | --     |
-| order       | 搜索排序字段                                 | `number`         | --     |
-| rules       | 单个搜索校验                                 | `FormItemRule[]` | --     |
-| span        | 单个搜索占据的栅栏宽度                       | `number`         | 6      |
-| maxlength   | 输入框最大输入长度                           | `number`         | --     |
-| value       | 单个搜索属性的默认值                         | `any`            | --     |
-| placeholder | 占位文本                                     | `string`         | --     |
-| type        | 类型（某些类型在查询组件中会被渲染成 input） | `string`         | --     |
+| 属性名           | 说明                                         | 类型                                                          | 默认值                         |
+| :--------------- | :------------------------------------------- | :------------------------------------------------------------ | :----------------------------- |
+| label            | 标题                                         | `string`                                                      | --                             |
+| prop             | 字段名                                       | `string`                                                      | --                             |
+| dicData          | 数据字典值                                   | `{label: string, value: any}[]`                               | []                             |
+| dicUrl           | 数据字典接口 url 地址                        | `string`                                                      | --                             |
+| dicQuery         | 数据字典接口请求参数                         | `Record<string, any>`                                         | --                             |
+| dicHeaders       | 数据字典接口请求头参数                       | `Record<string, any>`                                         | --                             |
+| dicFormatter     | 数据字典接口返回数据格式化方法               | `(res: any) => { list: any[]; label: string; value: string }` | --                             |
+| multiple         | type=select 时是否多选                       | `boolean`                                                     | false                          |
+| clearable        | type=select 或时间类型 时是否可清空          | `boolean`                                                     | false                          |
+| startPlaceholder | 时间范围选择器中开始时间的占位符             | `string`                                                      | --                             |
+| endPlaceholder   | 时间范围选择器中结束时间的占位符             | `string`                                                      | --                             |
+| format           | 时间类型选择器输入框显示时间的格式           | `string`                                                      | YYYY-MM-DD/YYYY-MM-DD HH:mm:ss |
+| valueFormat      | 时间类型选择器绑定值时间的格式               | `string`                                                      | YYYY-MM-DD/YYYY-MM-DD HH:mm:ss |
+| labelWidth       | 标签文字宽度                                 | `string`                                                      | --                             |
+| order            | 排序字段                                     | `number`                                                      | --                             |
+| rules            | 校验规则                                     | `FormItemRule[]`                                              | --                             |
+| span             | 单个占据的栅栏宽度                           | `number`                                                      | 6                              |
+| value            | 单个属性的默认值                             | `any`                                                         | --                             |
+| placeholder      | 占位文本                                     | `string`                                                      | --                             |
+| type             | 类型（某些类型在查询组件中会被渲染成 input） | `string`                                                      | --                             |
 
 #### Column Type
 

@@ -748,6 +748,7 @@ defineExpose({
           :size="size || globalConfig.size"
           :option="formOption"
           :model="modelForm"
+          :readonly="dialogType === 'view'"
         >
           <!-- 表单插槽 -->
           <template

@@ -495,3 +495,23 @@ h1 {
     padding: unset;
   }
 }
+
+.el-descriptions {
+  table {
+    border-collapse: unset;
+    margin: unset;
+    display: inherit;
+    overflow-x: unset;
+  }
+  tr {
+    border-top: unset;
+    &:nth-child(2n) {
+      background-color: unset;
+    }
+  }
+
+  th, td {
+    border: unset;
+    padding: unset;
+  }
+}
