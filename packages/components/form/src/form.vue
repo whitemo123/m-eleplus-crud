@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref, useSlots, watch } from 'vue'
 import { cloneDeep, get, set } from 'lodash-unified'
+import { column } from 'element-plus/es/components/table-v2/src/common'
 import { useGlobalConfig } from '@m-eleplus-crud/components'
 import { debugWarn } from '@m-eleplus-crud/utils'
 import { formEmits, formProps } from './form'
@@ -254,6 +255,33 @@ const calcDescContentWidth = (column: IFormColumn) => {
   return `calc(${((column.span || 12) / 24) * 100}% - ${
     column.labelWidth || formOption.value.labelWidth
   })`
+}
+
+/**
+ * @description 获取详情行
+ */
+const getDetailRows = () => {
+  const rows: any[] = []
+  let tmpIndex = -1
+  let tmpSpanTotal = 0
+  for (let i = 0; i < formOption.value.column.length; i++) {
+    const column = formOption.value.column[i]
+    if (tmpIndex === -1) {
+      rows.push([column])
+      tmpIndex++
+      tmpSpanTotal += column.span || 12
+    } else {
+      if (tmpSpanTotal + (column.span || 12) <= 24) {
+        rows[tmpIndex].push(column)
+        tmpSpanTotal += column.span || 12
+      } else {
+        rows.push([column])
+        tmpIndex++
+        tmpSpanTotal = column.span || 12
+      }
+    }
+  }
+  return rows
 }
 
 /**
@@ -519,25 +547,38 @@ defineExpose({
         </template>
       </el-descriptions-item>
     </el-descriptions> -->
-    <el-row v-else :gutter="0">
-      <el-col
-        v-for="(column, index) in formOption.column"
-        :key="index"
-        :span="column.span || 12"
-      >
-        <div class="detail-item">
-          <div class="detail-label">{{ column.prop }}</div>
-          <div class="detail-content">
-            <template v-if="column.type === 'picture'" />
-            <template v-else-if="NEED_DIC_TYPE.includes(column.type || '')">
-              {{ formatDicValue(proxys, column) }}
+    <template v-else>
+      <table class="detail-desc">
+        <tbody
+          v-for="(detailRow, detailIndex) in getDetailRows()"
+          :key="detailIndex"
+          style="width: 100%"
+        >
+          <tr style="width: 100%">
+            <template v-for="(column, index) in detailRow" :key="index">
+              <th
+                colspan="1"
+                :style="{ width: column.labelWidth || formOption.labelWidth }"
+              >
+                {{ column.prop }}
+              </th>
+              <td
+                :colspan="column.span || 12"
+                :style="{ width: column.labelWidth || formOption.labelWidth }"
+              >
+                <template v-if="column.type === 'picture'" />
+                <template v-else-if="NEED_DIC_TYPE.includes(column.type || '')">
+                  {{ formatDicValue(proxys, column) }}
+                </template>
+                <template v-else>
+                  {{ proxys[column.prop || ''] }}
+                </template>
+              </td>
+              <td v-if="column.span == 24" :colspan="1" />
             </template>
-            <template v-else>
-              {{ proxys[column.prop || ''] }}
-            </template>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
+          </tr>
+        </tbody>
+      </table>
+    </template>
   </div>
 </template>

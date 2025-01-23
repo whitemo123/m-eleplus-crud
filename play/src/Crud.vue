@@ -60,7 +60,8 @@ const crudOption = ref<any>({
     {
       label: "真名",
       prop: 'name',
-      width: 150
+      width: 150,
+      viewSpan: 24,
     },
     {
       label: "年龄",
