@@ -1,10 +1,7 @@
 import { useSizeProp } from '@m-eleplus-crud/hooks'
 import { buildProps, definePropType } from '@m-eleplus-crud/utils'
 
-import type {
-  ColumnType,
-  ICommonColumn,
-} from '@m-eleplus-crud/components/common'
+import type { ColumnType, ICommonColumn } from '../../common'
 import type { FormItemRule } from 'element-plus'
 
 import type { ExtractPropTypes } from 'vue'

@@ -22,6 +22,8 @@ export default {
       addDialogTitle: '新增',
       editDialogTitle: '编辑',
       viewDialogTitle: '查看',
+      dialogSaveBtnText: '保 存',
+      dialogCancelBtnText: '取 消',
     },
   },
 }

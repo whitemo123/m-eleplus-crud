@@ -22,6 +22,8 @@ export default {
       addDialogTitle: 'Add',
       editDialogTitle: 'Edit',
       viewDialogTitle: 'View',
+      dialogSaveBtnText: 'Save',
+      dialogCancelBtnText: 'Cancel',
     },
   },
 }

@@ -1,20 +1,6 @@
 .m-form {
   overflow-x: hidden;
 }
-// .detail-item {
-//   width: 100%;
-//   outline: 1px solid #ebeef5;
-//   box-sizing: border-box;
-//   display: flex;
-//   justify-content: flex-start;
-//   align-items: center;
-//   .detail-label {
-//     background: #f5f7fa;
-//     padding: 8px 11px;
-//     box-sizing: border-box;
-//     height: 100%;
-//   }
-// }
 
 .detail-desc {
   width: 100%;
@@ -27,20 +13,12 @@
   td {
     border: 1px solid var(--el-border-color-lighter);
     padding: 8px 11px;
-
-    .detail-item {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-
-      // .detail-label {
-      //   font-weight: 700;
-      //   height: 100%;
-      //   color: var(--el-text-color-regular);
-      //   background: var(--el-fill-color-light);
-      // }
+    color: var(--el-text-color-primary);
+    font-size: 14px;
+    &.label {
+      color: var(--el-text-color-regular);
+      font-weight: 700;
+      background: var(--el-fill-color-light);
     }
   }
 }

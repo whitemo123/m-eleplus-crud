@@ -418,16 +418,16 @@ const selectData = ref<any>([])
 
 #### ITableOption
 
-| 属性名    | 说明                                 | 类型                                               | 默认值   |
-| :-------- | :----------------------------------- | :------------------------------------------------- | :------- |
-| menu      | 是否显示操作列                       | `boolean`                                          | false    |
-| stripe    | 是否显示斑马纹                       | `boolean`                                          | false    |
-| border    | 是否显示纵向边框                     | `boolean`                                          | false    |
-| menuWidth | 操作栏宽度                           | `number`                                           | 220      |
-| menuFixed | 操作栏列冻结列 ，true 表示固定在左侧 | `true` &#124; `'left'` &#124; `'right'`            | 'right'  |
-| menuAlign | 操作栏按钮的对齐方式                 | `'left'` &#124; `'center'` &#124; `'right'` &#124; | 'center' |
-| menuTitle | 操作栏标题名称                       | `string`                                           | '操作'   |
-| column    | 配置项                               | `ITableColumn[]`                                   | []       |
+| 属性名    | 说明                                 | 类型                                        | 默认值   |
+| :-------- | :----------------------------------- | :------------------------------------------ | :------- |
+| menu      | 是否显示操作列                       | `boolean`                                   | false    |
+| stripe    | 是否显示斑马纹                       | `boolean`                                   | false    |
+| border    | 是否显示纵向边框                     | `boolean`                                   | false    |
+| menuWidth | 操作栏宽度                           | `number`                                    | 220      |
+| menuFixed | 操作栏列冻结列 ，true 表示固定在左侧 | `true` &#124; `'left'` &#124; `'right'`     | 'right'  |
+| menuAlign | 操作栏按钮的对齐方式                 | `'left'` &#124; `'center'` &#124; `'right'` | 'center' |
+| menuTitle | 操作栏标题名称                       | `string`                                    | '操作'   |
+| column    | 配置项                               | `ITableColumn[]`                            | []       |
 
 #### ITableColumn
 

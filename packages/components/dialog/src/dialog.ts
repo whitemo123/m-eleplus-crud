@@ -34,7 +34,7 @@ export const dialogProps = buildProps({
    */
   top: {
     type: String,
-    default: '15vh',
+    default: '2vh',
   },
   /**
    * @description 插入body

@@ -36,6 +36,7 @@ const crudOption = ref<any>({
       align: 'left',
       search: true,
       searchValue: '123',
+      viewSpan: 6,
       formRules: [
         {
           required: true,
@@ -49,6 +50,7 @@ const crudOption = ref<any>({
       label: "昵称",
       prop: 'nickName',
       width: 150,
+      viewSpan: 6,
       formRules: [
         {
           required: true,
@@ -61,12 +63,13 @@ const crudOption = ref<any>({
       label: "真名",
       prop: 'name',
       width: 150,
-      viewSpan: 24,
+      viewSpan: 6,
     },
     {
       label: "年龄",
       prop: 'age',
-      width: 150
+      width: 150,
+      viewSpan: 6,
     },
     {
       label: "备注",

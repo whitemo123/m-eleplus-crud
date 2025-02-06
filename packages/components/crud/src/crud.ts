@@ -8,22 +8,31 @@ import {
   isString,
 } from '@m-eleplus-crud/utils'
 import { useSizeProp } from '@m-eleplus-crud/hooks'
-import { ColumnType } from '@m-eleplus-crud/components/common'
+import { ColumnType, ICommonColumn } from '../../common'
 import type { ExtractPropTypes } from 'vue'
-import type {
-  IFormCommonColumn,
-  IFormCommonOption,
-  ISearchCommonColumn,
-  ISearchCommonOption,
-  ITableCommonColumn,
-  ITableCommonOption,
-} from '@m-eleplus-crud/m-eleplus-crud'
 import type { FormItemRule } from 'element-plus'
+import type { ITableCommonColumn, ITableCommonOption } from '../../table'
+import type { ISearchCommonColumn, ISearchCommonOption } from '../../search'
+import type { IFormCommonColumn, IFormCommonOption } from '../../form'
+
+// crud不需要继承form的column属性
+type WithoutFormColumn = Omit<
+  IFormCommonColumn,
+  'order' | 'value' | 'placeholder' | 'rules' | 'span' | 'labelWidth'
+>
+// crud不需要继承search的column属性
+type WithoutSearchColumn = Omit<
+  ISearchCommonColumn,
+  'order' | 'value' | 'placeholder' | 'rules' | 'span' | 'labelWidth'
+>
 
 export interface ICrudCommonColumn
-  extends ITableCommonColumn,
-    IFormCommonColumn,
-    ISearchCommonColumn {
+  extends ICommonColumn,
+    ITableCommonColumn,
+    // IFormCommonColumn,
+    // ISearchCommonColumn,
+    WithoutFormColumn,
+    WithoutSearchColumn {
   /**
    * @description 搜索排序
    */
@@ -52,6 +61,14 @@ export interface ICrudCommonColumn
    * @description 表单占位文本
    */
   formPlaceholder?: string
+  /**
+   * @description 搜索标签宽度
+   */
+  searchLabelWidth?: string
+  /**
+   * @description 表单标签宽度
+   */
+  formLabelWidth?: string
   /**
    * @description 搜索校验规则
    */
@@ -261,6 +278,17 @@ export const crudEmits = {
    * @returns
    */
   'update:modelValue': (value: any) => isObject(value),
+  /**
+   * 查询事件触发
+   * @param form 查询表单数据
+   * @returns
+   */
+  search: (form: any) => isObject(form),
+  /**
+   * 重置事件触发
+   * @returns
+   */
+  reset: () => true,
   /**
    * 新增
    * @param form 表单数据

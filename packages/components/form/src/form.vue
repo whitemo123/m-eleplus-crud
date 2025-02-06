@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import { ref, useSlots, watch } from 'vue'
+import { computed, ref, useSlots, watch } from 'vue'
 import { cloneDeep, get, set } from 'lodash-unified'
-import { column } from 'element-plus/es/components/table-v2/src/common'
 import { useGlobalConfig } from '@m-eleplus-crud/components'
 import { debugWarn } from '@m-eleplus-crud/utils'
 import { formEmits, formProps } from './form'
@@ -61,8 +60,30 @@ const formOption = ref<IFormOption>({
   column: [],
 })
 
+/**
+ * @description 计算详情模式下的表格行
+ */
+const detailTableRows = computed(() => {
+  const rows = []
+  let currentRow = []
+  let currentTotal = 0
+  for (const item of formOption.value.column || []) {
+    const req = item.span || 12
+    // 若当前行加入该项超过总列数，则开启新行
+    if (currentTotal + req > 24) {
+      rows.push(currentRow)
+      currentRow = []
+      currentTotal = 0
+    }
+    currentRow.push(item)
+    currentTotal += req
+  }
+  if (currentRow.length) rows.push(currentRow)
+  return rows
+})
+
 // 表单model
-const proxys = new Proxy(props.model, {
+const proxys = new Proxy(props.model as any, {
   get(target, property) {
     return get(target, property)
   },
@@ -141,7 +162,8 @@ const getValueFormatByType = (type: string) => {
  * 处理需要远程获取字典的配置
  */
 const getAllRemoteDics = () => {
-  if (!globalConfig.value?.httpGet) {
+  const hasDicUrl = formOption.value?.column?.some((column) => column.dicUrl)
+  if (hasDicUrl && !globalConfig.value?.httpGet) {
     debugWarn('MForm', 'global config httpGet is null')
     return
   }
@@ -248,40 +270,33 @@ const formatDicValue = (row: any, column: IFormColumn) => {
 }
 
 /**
- * @description 计算描述内容的宽度
- * @param column 列配置
+ * 拿到详情模式下的图片集合
+ * @param row
+ * @param column
  */
-const calcDescContentWidth = (column: IFormColumn) => {
-  return `calc(${((column.span || 12) / 24) * 100}% - ${
-    column.labelWidth || formOption.value.labelWidth
-  })`
+const getDetailPic = (row: any, column: IFormColumn) => {
+  if (!row || !row[column.prop || '']) {
+    return []
+  }
+  const pics: string[] = row[column.prop || '']
+    .split(column.imgSuffix || ';')
+    .map((pic: string) => (column.imgPrefix || '') + pic)
+  return pics
 }
 
-/**
- * @description 获取详情行
- */
-const getDetailRows = () => {
-  const rows: any[] = []
-  let tmpIndex = -1
-  let tmpSpanTotal = 0
-  for (let i = 0; i < formOption.value.column.length; i++) {
-    const column = formOption.value.column[i]
-    if (tmpIndex === -1) {
-      rows.push([column])
-      tmpIndex++
-      tmpSpanTotal += column.span || 12
-    } else {
-      if (tmpSpanTotal + (column.span || 12) <= 24) {
-        rows[tmpIndex].push(column)
-        tmpSpanTotal += column.span || 12
-      } else {
-        rows.push([column])
-        tmpIndex++
-        tmpSpanTotal = column.span || 12
-      }
-    }
+const getValueColspan = (
+  item: IFormColumn,
+  rows: IFormColumn[],
+  index: number
+) => {
+  const getRemaining = (row: IFormColumn[]) => {
+    const used = row.reduce((acc, item) => acc + (item.span || 12), 0)
+    return 24 - used
   }
-  return rows
+  if (index === rows.length - 1) {
+    return (item.span || 12) + getRemaining(rows) - 1
+  }
+  return (item.span || 12) - 1
 }
 
 /**
@@ -521,60 +536,48 @@ defineExpose({
     </el-form>
     <!---->
     <!--详情模式-->
-    <!-- <el-descriptions
-      v-else
-      :size="size || globalConfig.size"
-      :column="24"
-      style="width: 100%"
-      border
-    >
-      <el-descriptions-item
-        v-for="(item, index) in formOption.column"
-        :key="index"
-        :label="item.label"
-        :span="item.span || 12"
-        :label-width="item.labelWidth || formOption.labelWidth"
-        :width="calcDescContentWidth(item)"
-      >
-        <template v-if="item.type === 'picture'">
-        </template>
-        <template v-else-if="NEED_DIC_TYPE.includes(item.type || '')">
-          {{ formatDicValue(proxys, item) }}
-        </template>
-        <template v-else>
-          {{ proxys[item.prop || ''] }}
-          {{ calcDescContentWidth(item) }}
-        </template>
-      </el-descriptions-item>
-    </el-descriptions> -->
     <template v-else>
       <table class="detail-desc">
-        <tbody
-          v-for="(detailRow, detailIndex) in getDetailRows()"
-          :key="detailIndex"
-          style="width: 100%"
-        >
-          <tr style="width: 100%">
-            <template v-for="(column, index) in detailRow" :key="index">
-              <th
-                colspan="1"
-                :style="{ width: column.labelWidth || formOption.labelWidth }"
-              >
-                {{ column.prop }}
-              </th>
+        <tbody>
+          <tr v-for="(row, rowIndex) in detailTableRows" :key="rowIndex">
+            <template v-for="(column, index) in row" :key="index">
               <td
-                :colspan="column.span || 12"
                 :style="{ width: column.labelWidth || formOption.labelWidth }"
+                colspan="1"
+                class="label"
               >
-                <template v-if="column.type === 'picture'" />
+                {{ column.label }}
+              </td>
+              <td :colspan="getValueColspan(column, row, index)">
+                <template v-if="column.type === 'picture'">
+                  <MPicture
+                    :src="getDetailPic(proxys, column)[0]"
+                    :preview-src-list="getDetailPic(proxys, column)[0]"
+                    img-width="100px"
+                    img-height="100px"
+                  />
+                </template>
                 <template v-else-if="NEED_DIC_TYPE.includes(column.type || '')">
                   {{ formatDicValue(proxys, column) }}
+                </template>
+                <template v-else-if="column.type === 'qrcode'">
+                  <MQrcode
+                    v-if="proxys[column.prop || '']"
+                    :text="proxys[column.prop || '']"
+                    align="center"
+                  />
+                </template>
+                <template v-else-if="column.type === 'barcode'">
+                  <MBarcode
+                    v-if="proxys[column.prop || '']"
+                    :text="proxys[column.prop || '']"
+                    align="center"
+                  />
                 </template>
                 <template v-else>
                   {{ proxys[column.prop || ''] }}
                 </template>
               </td>
-              <td v-if="column.span == 24" :colspan="1" />
             </template>
           </tr>
         </tbody>

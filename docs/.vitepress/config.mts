@@ -25,6 +25,7 @@ export default defineConfig({
           { text: 'Search 查询', link: '/components/search' },
           { text: 'Table 列表', link: '/components/table' },
           { text: 'Form 表单', link: '/components/form' },
+          { text: 'Dialog 弹窗', link: '/components/dialog' },
           { text: 'Crud 增删改查', link: '/components/crud' },
         ],
       },

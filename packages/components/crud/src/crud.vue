@@ -155,6 +155,10 @@ const modelForm = computed({
   },
 })
 
+// 备份第一次的modelForm
+const __firstModelForm = ref<any>({})
+__firstModelForm.value = props.modelValue
+
 /**
  * @description table配置项
  */
@@ -249,7 +253,7 @@ const transSearchColumn = (column: ICrudColumn): ISearchColumn => {
     delete result.order
   }
   // 转换默认值
-  if (column.value) {
+  if (column.searchValue) {
     result.value = column.searchValue
   } else {
     delete result.value
@@ -271,6 +275,12 @@ const transSearchColumn = (column: ICrudColumn): ISearchColumn => {
     result.span = column.searchSpan
   } else {
     delete result.span
+  }
+  // 转换labelWidth
+  if (column.searchLabelWidth) {
+    result.labelWidth = column.searchLabelWidth
+  } else {
+    delete result.labelWidth
   }
 
   return result
@@ -306,6 +316,12 @@ const transFormColumn = (column: ICrudColumn): IFormColumn => {
     result.rules = column.formRules
   } else {
     delete result.rules
+  }
+  // 转换labelWidth
+  if (column.formLabelWidth) {
+    result.labelWidth = column.formLabelWidth
+  } else {
+    delete result.labelWidth
   }
   // 转换栅格
   if (column.formSpan || column.addSpan || column.editSpan || column.viewSpan) {
@@ -371,6 +387,24 @@ const currentPageChange = (page: number) => {
 const pageSizeChange = (pageSize: number) => {
   searchProxys.limit = pageSize
   searchRef.value?.search()
+}
+
+/**
+ * @description 搜索事件
+ * @param form 搜索表单值
+ * @param done 完成回调
+ */
+const handleSearch = (form: any) => {
+  tableRef.value?.clearSelection()
+  emit('search', form)
+}
+
+/**
+ * @description 重置搜索
+ */
+const handleReset = () => {
+  tableRef.value?.clearSelection()
+  emit('reset')
 }
 
 /**
@@ -480,7 +514,7 @@ const dialogEnter = async (done: () => void, loading: () => void) => {
 }
 
 const dialogCancel = () => {
-  emit('rowCancel', _modelForm.value, _rowIndex.value, dialogType.value)
+  emit('rowCancel', _modelForm.value || {}, _rowIndex.value, dialogType.value)
 }
 
 /**
@@ -493,8 +527,9 @@ const dialogClose = () => {
 
   if (formRef.value) {
     formRef.value.clear()
+    modelForm.value = cloneDeep(__firstModelForm.value)
   } else {
-    emit('update:modelValue', {})
+    emit('update:modelValue', cloneDeep(__firstModelForm.value))
   }
 }
 
@@ -582,6 +617,10 @@ defineExpose({
    * @description 查看
    */
   rowView,
+  /**
+   * @description 删除
+   */
+  rowDel,
 })
 </script>
 
@@ -593,6 +632,8 @@ defineExpose({
       :option="searchOption"
       :size="size || globalConfig.size"
       :permission="permission"
+      @search="handleSearch"
+      @reset="handleReset"
     >
       <!-- 搜索插槽 -->
       <template
@@ -679,6 +720,13 @@ defineExpose({
           name="delBtn"
           v-bind="scope"
         />
+        <slot
+          v-if="
+            crudOption.menu && slots.menu && !(slots.editBtn || slots.delBtn)
+          "
+          name="menu"
+          v-bind="scope"
+        />
       </template>
       <!---->
     </MTable>
@@ -703,6 +751,9 @@ defineExpose({
       :width="crudOption.dialogWidth"
       :save-btn="dialogType !== 'view'"
       :cancel-btn="dialogType !== 'view'"
+      :save-btn-text="t('m.crud.dialogSaveBtnText')"
+      :cancel-btn-text="t('m.crud.dialogCancelBtnText')"
+      :save-btn-icon="dialogType === 'add' ? 'CirclePlus' : 'CircleCheck'"
       @enter="dialogEnter"
       @cancel="dialogCancel"
       @close="dialogClose"

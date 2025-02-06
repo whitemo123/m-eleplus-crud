@@ -86,9 +86,9 @@ const modelForm = ref<any>({})
 
 ### Form 插槽
 
-| 名称    | 说明          | 值              |
-| :------ | :------------ | :-------------- |
-| prop 值 | prop 属性的值 | `{row, $index}` |
+| 名称    | 说明          | 值                |
+| :------ | :------------ | :---------------- |
+| prop 值 | prop 属性的值 | `{size, loading}` |
 
 ### Form Exposes
 

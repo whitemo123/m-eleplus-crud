@@ -190,7 +190,8 @@ const refreshTable = () => {
  * 处理需要远程获取字典的配置
  */
 const getAllRemoteDics = () => {
-  if (!globalConfig.value?.httpGet) {
+  const hasDicUrl = tableOption.value?.column?.some((column) => column.dicUrl)
+  if (hasDicUrl && !globalConfig.value?.httpGet) {
     debugWarn('MTable', 'global config httpGet is null')
     return
   }
@@ -415,6 +416,8 @@ defineExpose({
             :preview-src-list="
               getProductPic(scope.row[column.prop || ''], column)
             "
+            :img-width="column.imgWidth"
+            :img-height="column.imgHeight"
           />
           <!---->
           <!--二维码-->
