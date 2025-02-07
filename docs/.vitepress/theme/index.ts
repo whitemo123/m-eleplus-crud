@@ -15,7 +15,7 @@ import examples from '../../examples'
 
 export default {
   extends: DefaultTheme,
-  enhanceApp({ app }) {
+  async enhanceApp({ app }) {
     app.use(ElementPlus, {
       locale: zhCn,
     })
@@ -24,12 +24,15 @@ export default {
       app.component(key, component)
     }
 
-    app.use(MElePlusCrud, {
-      size: 'default',
-    })
+    // @ts-ignore
+    if (!import.meta.env.SSR) {
+      app.use(MElePlusCrud, {
+        size: 'default',
+      })
 
-    for (const example of examples) {
-      app.use(example)
+      for (const example of examples) {
+        app.use(example)
+      }
     }
   },
 }

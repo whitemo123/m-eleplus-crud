@@ -15,16 +15,17 @@
   <br>
 </p>
 
-<p align="center">MElePlusCrud - A Crud Vue3 Component Library Based On Element Plus</p>
+<p align="center">一个基于Element Plus二次封装的增删改查Vue3组件库</p>
 
-- 💪 Vue 3 Composition API
-- 🔥 Written in TypeScript
+- 快速上手-会 JSON 吗？会就能立马上手。
+- 高效开发-能快速实现常规 CRUD 操作
+- 无侵入性-不会侵入任何业务代码
 
-## Getting Started
+## 文档
 
-xxxxx
+详细的 Example 或描述，请访问[doc](https://crud.whitemo.xyz)
 
 ## License
 
-Element Plus is open source software licensed as
+MElePlusCrud is open source software licensed as
 [MIT](https://github.com/whitemo123/m-eleplus-crud/blob/master/LICENSE).
