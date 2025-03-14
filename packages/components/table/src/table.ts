@@ -90,6 +90,10 @@ export interface ITableCommonOption {
    * @description 操作栏标题名称
    */
   menuTitle?: string
+  /**
+   * @description 表格rowKey
+   */
+  rowKey?: string
 }
 
 export interface ITableOption extends ITableCommonOption {

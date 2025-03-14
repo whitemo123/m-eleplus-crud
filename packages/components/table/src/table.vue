@@ -56,6 +56,8 @@ const tableOption = ref<ITableOption>({
   menuFixed: 'right',
   // 操作栏按钮居中
   menuAlign: 'center',
+  // 表格行key
+  rowKey: 'id',
   // 表格列配置
   column: [],
 })
@@ -357,6 +359,7 @@ defineExpose({
       :max-height="props.maxHeight"
       :border="tableOption.border"
       :stripe="tableOption.stripe"
+      :row-key="tableOption.rowKey"
       @selection-change="selectionChange"
     >
       <template #empty>
@@ -379,7 +382,7 @@ defineExpose({
       <el-table-column
         v-for="(column, columnIndex) in tableOption.column"
         :key="columnIndex"
-        :type="['index', 'selection'].includes(column.type as string) ? column.type : null"
+        :type="['index', 'selection'].includes(column.type as string) ? column.type : 'default'"
         :width="column.width"
         :label="column.label"
         :prop="column.prop"

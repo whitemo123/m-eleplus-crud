@@ -215,6 +215,23 @@ const getAllRemoteDics = () => {
 }
 
 /**
+ * 根据配置获取表单项的绑定事件
+ * @param column
+ */
+const getFormItemEventBind = (column: IFormColumn): object => {
+  const result: any = {}
+  for (const key in column) {
+    if (key.startsWith('event')) {
+      let funName = key.replace('event', '')
+      funName = funName.charAt(0).toLowerCase() + funName.slice(1)
+      // @ts-ignore
+      result[funName] = column[key]
+    }
+  }
+  return result
+}
+
+/**
  * 解析字典并展示
  * @param row 行数据
  * @param column 列配置
@@ -405,6 +422,7 @@ defineExpose({
               :type="
                 !column.type || column.type === 'input' ? 'text' : column.type
               "
+              v-on="getFormItemEventBind(column)"
             />
             <!---->
             <!--下拉框-->
@@ -420,6 +438,7 @@ defineExpose({
               :remote="column.remote"
               :remote-method="column.remoteMethod"
               :loading="column.loading"
+              v-on="getFormItemEventBind(column)"
             >
               <el-option
                 v-for="(dicItem, dicIndex) in column.dicData || []"
@@ -434,6 +453,7 @@ defineExpose({
               v-else-if="column.type === 'radio'"
               v-model="proxys[column.prop || '']"
               style="width: 100%"
+              v-on="getFormItemEventBind(column)"
             >
               <el-radio
                 v-for="(dicItem, dicIndex) in column.dicData || []"
@@ -450,6 +470,7 @@ defineExpose({
               v-else-if="column.type === 'checkbox'"
               v-model="proxys[column.prop || '']"
               style="width: 100%"
+              v-on="getFormItemEventBind(column)"
             >
               <el-checkbox
                 v-for="(dicItem, dicIndex) in column.dicData || []"
@@ -475,6 +496,7 @@ defineExpose({
                   v-model="proxys[column.prop || '']"
                   :active-value="column.dicData[0].value"
                   :inactive-value="column.dicData[1].value"
+                  v-on="getFormItemEventBind(column)"
                 />
                 <span
                   style="
@@ -504,6 +526,7 @@ defineExpose({
                 :value-format="
                   column.valueFormat || getValueFormatByType(column.type)
                 "
+                v-on="getFormItemEventBind(column)"
               />
               <el-time-picker
                 v-else
@@ -515,6 +538,7 @@ defineExpose({
                 :value-format="
                   column.valueFormat || getValueFormatByType(column.type)
                 "
+                v-on="getFormItemEventBind(column)"
               />
             </template>
             <!---->

@@ -6,10 +6,15 @@ import type { FormItemRule } from 'element-plus'
 
 import type { ExtractPropTypes } from 'vue'
 
+// 事件处理
+type EventHandlers = {
+  [K in `event${string}`]?: (...args: any[]) => any
+}
+
 /**
  * @description 公开的form column配置
  */
-export interface IFormCommonColumn {
+export interface IFormCommonColumn extends EventHandlers {
   /**
    * 表单校验规则
    */

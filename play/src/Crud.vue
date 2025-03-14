@@ -51,6 +51,9 @@ const crudOption = ref<any>({
       prop: 'nickName',
       width: 150,
       viewSpan: 6,
+      eventChange: (value: any) => {
+        console.log(value)
+      },
       formRules: [
         {
           required: true,

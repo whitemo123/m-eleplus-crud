@@ -417,14 +417,14 @@ const setTableHeight = () => {
       // 表格style对象
       const tableStyle = tableRef.value?.$el
       // 分页对象
-      const pageStyle: any = document.querySelector('.m-pagination-box')
+      // const pageStyle: any = document.querySelector('.m-pagination-box')
       // 额外可控制高度参数
       const calcHeight: number =
         crudOption.value.calcHeight || globalConfig.value?.calcHeight || 0
       tableHeight.value =
         document.documentElement.clientHeight -
         (tableStyle?.offsetTop || 0) -
-        (pageStyle?.offsetHeight || 0) -
+        72 -
         calcHeight
     } else {
       tableHeight.value = crudOption.value.height
