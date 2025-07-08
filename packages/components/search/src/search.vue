@@ -407,7 +407,7 @@ defineExpose({
             <el-link
               v-if="searchOption.col"
               style="width: 54px; margin-left: 12px"
-              :underline="false"
+              underline="never"
               :disabled="loading"
               type="default"
               @click="toggleCol"

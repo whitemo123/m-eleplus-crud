@@ -86,7 +86,7 @@ const crudOption = ref<any>({
 
 <template>
   <div>
-    <MCrud ref="crudRef" v-model:search="query" v-model="modelForm" :total="total" :data="tableData" :option="crudOption">
+    <MCrud :permission="{add: false}" ref="crudRef" v-model:search="query" v-model="modelForm" :total="total" :data="tableData" :option="crudOption">
       <template #topLeft="{size}">
         <el-button :size="size" type="default">导出</el-button>
       </template>

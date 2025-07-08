@@ -649,7 +649,7 @@ defineExpose({
     <div v-if="crudOption.addBtn || slots.topLeft" class="m-search-top">
       <div class="m-search-left">
         <el-button
-          v-if="crudOption.addBtn && !slots.addBtn"
+          v-if="crudOption.addBtn && !slots.addBtn && permission['add'] !== false"
           :size="size || globalConfig.size"
           type="primary"
           :icon="crudOption.addBtnIcon"
@@ -657,7 +657,7 @@ defineExpose({
         >
           {{ crudOption.addBtnText }}
         </el-button>
-        <slot name="addBtn" v-bind="{ size: size || globalConfig.size }" />
+        <slot name="addBtn" v-if="permission['add'] !== false" v-bind="{ size: size || globalConfig.size }" />
         <slot name="topLeft" v-bind="{ size: size || globalConfig.size }" />
       </div>
       <div class="m-search-right">
@@ -689,26 +689,26 @@ defineExpose({
       <!--操作栏-->
       <template #menu="scope">
         <el-link
-          v-if="crudOption.editBtn && !slots.editBtn"
+          v-if="crudOption.editBtn && !slots.editBtn && permission['edit'] !== false"
           class="m-control-btns"
           type="primary"
           :size="size || globalConfig.size"
-          :underline="false"
+          underline="never"
           icon="Edit"
           @click="rowEdit(scope.row, scope.$index)"
         >
           {{ t('m.crud.editBtnText') }}
         </el-link>
         <slot
-          v-if="crudOption.editBtn && slots.editBtn"
+          v-if="crudOption.editBtn && slots.editBtn && permission['edit'] !== false"
           name="editBtn"
           v-bind="scope"
         />
         <el-link
-          v-if="crudOption.delBtn && !slots.delBtn"
+          v-if="crudOption.delBtn && !slots.delBtn && permission['del'] !== false"
           class="m-control-btns"
           type="primary"
-          :underline="false"
+          underline="never"
           :size="size || globalConfig.size"
           icon="Delete"
           @click="rowDel(scope.row, scope.$index)"
@@ -716,7 +716,7 @@ defineExpose({
           {{ t('m.crud.delBtnText') }}
         </el-link>
         <slot
-          v-if="crudOption.delBtn && slots.delBtn"
+          v-if="crudOption.delBtn && slots.delBtn && permission['del'] !== false"
           name="delBtn"
           v-bind="scope"
         />
