@@ -28,11 +28,11 @@ type WithoutSearchColumn = Omit<
 
 export interface ICrudCommonColumn
   extends ICommonColumn,
-    ITableCommonColumn,
-    // IFormCommonColumn,
-    // ISearchCommonColumn,
-    WithoutFormColumn,
-    WithoutSearchColumn {
+  ITableCommonColumn,
+  // IFormCommonColumn,
+  // ISearchCommonColumn,
+  WithoutFormColumn,
+  WithoutSearchColumn {
   /**
    * @description 搜索排序
    */
@@ -113,6 +113,14 @@ export interface ICrudCommonColumn
    * @description 表单项框栅列
    */
   formSpan?: number
+  /**
+   * @description 新增表单禁用
+   */
+  addDisabled?: boolean
+  /**
+   * @description 编辑表单禁用
+   */
+  editDisabled?: boolean
 }
 
 export interface ICrudColumn extends ICrudCommonColumn {
@@ -124,8 +132,8 @@ export interface ICrudColumn extends ICrudCommonColumn {
  */
 export interface ICrudOption
   extends ITableCommonOption,
-    IFormCommonOption,
-    ISearchCommonOption {
+  IFormCommonOption,
+  ISearchCommonOption {
   /**
    * @description 新增按钮是否需要
    */

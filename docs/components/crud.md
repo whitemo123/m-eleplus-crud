@@ -468,6 +468,9 @@ const openDel = (row: any, index: number) => {
 | searchPlaceholder | 搜索占位文本                                       | `string`                                                      | --                             |
 | formPlaceholder   | 表单占位文本                                       | `string`                                                      | --                             |
 | type              | 类型                                               | `string`                                                      | --                             |
+| disabled | 表单禁用 | `boolean` | -- |
+| addDisabled | 新增表单禁用 | `boolean` | -- |
+| editDisabled | 编辑表单禁用 | `boolean` | -- |
 
 #### Column Type
 

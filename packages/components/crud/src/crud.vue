@@ -338,6 +338,13 @@ const transFormColumn = (column: ICrudColumn): IFormColumn => {
   } else {
     delete result.span
   }
+  if (column.addDisabled || column.editDisabled) {
+    if (dialogType.value === 'add' && column.addDisabled) {
+      result.disabled = column.addDisabled
+    } else if(dialogType.value === 'edit' && column.editDisabled) {
+      result.disabled = column.editDisabled
+    }
+  }
 
   return result
 }
@@ -646,8 +653,8 @@ defineExpose({
       <!---->
     </MSearch>
     <!--顶部操作区域-->
-    <div v-if="crudOption.addBtn || slots.topLeft" class="m-search-top">
-      <div class="m-search-left">
+    <div v-if="crudOption.addBtn || slots.topLeft || slots.topRight" class="m-search-top">
+      <div v-if="crudOption.addBtn || slots.topLeft" class="m-search-left">
         <el-button
           v-if="crudOption.addBtn && !slots.addBtn && permission['add'] !== false"
           :size="size || globalConfig.size"
@@ -660,6 +667,7 @@ defineExpose({
         <slot name="addBtn" v-if="permission['add'] !== false" v-bind="{ size: size || globalConfig.size }" />
         <slot name="topLeft" v-bind="{ size: size || globalConfig.size }" />
       </div>
+      <div class="m-search-left" v-else></div>
       <div class="m-search-right">
         <slot name="topRight" v-bind="{ size: size || globalConfig.size }" />
       </div>

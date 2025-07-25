@@ -419,6 +419,7 @@ defineExpose({
               :maxlength="column.maxlength"
               :show-word-limit="column.showWordLimit"
               :show-password="column.showPassword"
+              :disabled="column.disabled || false"
               :type="
                 !column.type || column.type === 'input' ? 'text' : column.type
               "
@@ -430,6 +431,7 @@ defineExpose({
               v-else-if="column.type === 'select'"
               v-model.trim="proxys[column.prop || '']"
               style="width: 100%"
+              :disabled="column.disabled || false"
               :placeholder="column.placeholder"
               :multiple="column.multiple"
               :clearable="column.clearable"
@@ -452,6 +454,7 @@ defineExpose({
             <el-radio-group
               v-else-if="column.type === 'radio'"
               v-model="proxys[column.prop || '']"
+              :disabled="column.disabled || false"
               style="width: 100%"
               v-on="getFormItemEventBind(column)"
             >
@@ -470,6 +473,7 @@ defineExpose({
               v-else-if="column.type === 'checkbox'"
               v-model="proxys[column.prop || '']"
               style="width: 100%"
+              :disabled="column.disabled || false"
               v-on="getFormItemEventBind(column)"
             >
               <el-checkbox
@@ -494,6 +498,7 @@ defineExpose({
               <template v-else>
                 <el-switch
                   v-model="proxys[column.prop || '']"
+                  :disabled="column.disabled || false"
                   :active-value="column.dicData[0].value"
                   :inactive-value="column.dicData[1].value"
                   v-on="getFormItemEventBind(column)"
@@ -520,6 +525,7 @@ defineExpose({
                 v-model="proxys[column.prop || '']"
                 :type="column.type"
                 :clearable="column.clearable"
+                :disabled="column.disabled || false"
                 :start-placeholder="column.startPlaceholder"
                 :end-placeholder="column.endPlaceholder"
                 :format="column.format"
@@ -531,6 +537,7 @@ defineExpose({
               <el-time-picker
                 v-else
                 v-model="proxys[column.prop || '']"
+                :disabled="column.disabled || false"
                 :is-range="column.type === 'timerange'"
                 :clearable="column.clearable"
                 :start-placeholder="column.startPlaceholder"

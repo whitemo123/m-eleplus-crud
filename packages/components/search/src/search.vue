@@ -151,16 +151,25 @@ const getValueFormatByType = (type: string) => {
  * @param page 第一页
  */
 const search = (page = 1) => {
-  formRef.value?.validate((valid) => {
-    if (valid) {
-      // 搜索从第一页开始搜索，也支持传入页码
-      if (proxys.page) {
-        proxys.page = page
+  if (searchOption.value.column && searchOption.value.column.length) {
+    formRef.value?.validate((valid) => {
+      if (valid) {
+        // 搜索从第一页开始搜索，也支持传入页码
+        if (proxys.page) {
+          proxys.page = page
+        }
+        // emit搜索事件 如果非第一页，自动重置第一页
+        emit('search', proxys)
       }
-      // emit搜索事件 如果非第一页，自动重置第一页
-      emit('search', proxys)
+    })
+  } else {
+    // 搜索从第一页开始搜索，也支持传入页码
+    if (proxys.page) {
+      proxys.page = page
     }
-  })
+    // emit搜索事件 如果非第一页，自动重置第一页
+    emit('search', proxys)
+  }
 }
 
 /**
@@ -313,6 +322,7 @@ defineExpose({
           >
             <el-form-item
               style="width: 100%"
+              :label-width="column.labelWidth || searchOption.labelWidth"
               :label="column.label + ':'"
               :prop="column.prop"
               :rules="column.rules"

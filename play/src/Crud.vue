@@ -12,10 +12,10 @@ const tableData = ref<any>([
     name: '刘大成',
     age: 18,
     remark: '撒啊撒娇很久很久不打说不定还是德国撒娇好的vgdhv爱得更多v韩国va韩国v爱韩庚v的萨汗国的v阿达好尬v的安徽的vga的'
-  }
+  },
 ])
 
-const total = ref(1)
+const total = ref(11)
 
 const query = ref<any>({
   page: 1,
@@ -34,7 +34,6 @@ const crudOption = ref<any>({
       prop: 'id',
       width: 180,
       align: 'left',
-      search: true,
       searchValue: '123',
       viewSpan: 6,
       formRules: [
@@ -45,6 +44,12 @@ const crudOption = ref<any>({
         }
       ],
       addHide: true
+    },
+    {
+      label: "很长的名字啊啊啊啊啊",
+      prop: "longProp",
+      searchLabelWidth: '200px',
+      addDisabled: true
     },
     {
       label: "昵称",
@@ -86,10 +91,10 @@ const crudOption = ref<any>({
 
 <template>
   <div>
-    <MCrud :permission="{add: false}" ref="crudRef" v-model:search="query" v-model="modelForm" :total="total" :data="tableData" :option="crudOption">
-      <template #topLeft="{size}">
+    <MCrud :permission="{add: true}" ref="crudRef" v-model:search="query" v-model="modelForm" :total="total" :data="tableData" :option="crudOption">
+      <!-- <template #topLeft="{size}">
         <el-button :size="size" type="default">导出</el-button>
-      </template>
+      </template> -->
       <template #topRight>
         <span>合计：100.25</span>
       </template>
