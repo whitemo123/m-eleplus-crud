@@ -463,6 +463,7 @@ defineExpose({
         :width="tableOption.menuWidth"
         :label="tableOption.menuTitle || t('m.table.menuTitle')"
         align="center"
+        :fixed="tableOption.menuFixed"
       >
         <template #default="scope">
           <slot v-if="slots.menu" name="menu" v-bind="scope" />
