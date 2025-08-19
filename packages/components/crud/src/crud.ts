@@ -62,6 +62,14 @@ export interface ICrudCommonColumn
    */
   formPlaceholder?: string
   /**
+   * @description 搜索下拉组件等可清除
+   */
+  searchClearable?: boolean
+  /**
+   * @description 表单下拉组件等可清除
+   */
+  formClearable?: boolean
+  /**
    * @description 搜索标签宽度
    */
   searchLabelWidth?: string

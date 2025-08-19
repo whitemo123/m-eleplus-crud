@@ -118,7 +118,7 @@ const modelForm = ref<any>({})
 | dicHeaders       | 数据字典接口请求头参数                             | `Record<string, any>`                                         | --                             |
 | dicFormatter     | 数据字典接口返回数据格式化方法                     | `(res: any) => { list: any[]; label: string; value: string }` | --                             |
 | multiple         | type=select 时是否多选                             | `boolean`                                                     | false                          |
-| clearable        | type=select 或时间类型 时是否可清空                | `boolean`                                                     | false                          |
+| clearable        | 是否可清空                | `boolean`                                                     | false                          |
 | filterable       | type=select 时是否可搜索                           | `boolean`                                                     | false                          |
 | filterMethod     | type=select 时自定义搜索方法                       | `(keyword: string) => void`                                   | --                             |
 | remote           | type=select 时是否可远程搜索                       | `boolean`                                                     | --                             |

@@ -38,6 +38,10 @@ export interface ISearchCommonColumn {
    * @description 输入框占位文本
    */
   placeholder?: string
+  /**
+   * @description 可清除
+   */
+  clearable?: boolean
 }
 
 /**

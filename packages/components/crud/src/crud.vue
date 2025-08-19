@@ -282,6 +282,12 @@ const transSearchColumn = (column: ICrudColumn): ISearchColumn => {
   } else {
     delete result.labelWidth
   }
+  // 转换clearable
+  if (column.searchClearable) {
+    result.clearable = column.searchClearable
+  } else {
+    delete result.clearable
+  }
 
   return result
 }
@@ -322,6 +328,12 @@ const transFormColumn = (column: ICrudColumn): IFormColumn => {
     result.labelWidth = column.formLabelWidth
   } else {
     delete result.labelWidth
+  }
+  // 转换clearable
+  if (column.formClearable) {
+    result.clearable = column.formClearable
+  } else {
+    delete result.clearable
   }
   // 转换栅格
   if (column.formSpan || column.addSpan || column.editSpan || column.viewSpan) {

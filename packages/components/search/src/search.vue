@@ -253,6 +253,18 @@ const getAllRemoteDics = () => {
 }
 
 /**
+ * 包裹处理下拉框组件数据
+ * @param arr 下拉框数据
+ */
+const wrapSelectData = (arr: any) => {
+  if (!arr) {
+    return []
+  }
+  return [{ label: '全部', value: '' }, ...arr]
+}
+
+
+/**
  * @description 监听搜索列的变化
  */
 watch(
@@ -356,10 +368,11 @@ defineExpose({
                   style="width: 100%"
                   :placeholder="column.placeholder"
                   :multiple="column.multiple || column.type === 'checkbox'"
-                  :clearable="column.clearable"
+                  :clearable="column.clearable === undefined ? true : column.clearable"
+                  :empty-values="[null, undefined]"
                 >
                   <el-option
-                    v-for="(dicItem, dicIndex) in column.dicData || []"
+                    v-for="(dicItem, dicIndex) in wrapSelectData(column.dicData)"
                     :key="dicIndex"
                     :label="dicItem.label"
                     :value="dicItem.value"

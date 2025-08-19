@@ -55,6 +55,10 @@ export interface IFormCommonColumn extends EventHandlers {
    * @description 表单禁用
    */
   disabled?: boolean
+  /**
+   * @description 可清除
+   */
+  clearable?: boolean
 }
 
 export interface IFormColumn extends ICommonColumn, IFormCommonColumn {

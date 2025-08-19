@@ -322,7 +322,7 @@ const reset = () => {}
 | dicHeaders       | 数据字典接口请求头参数                       | `Record<string, any>`                                         | --                             |
 | dicFormatter     | 数据字典接口返回数据格式化方法               | `(res: any) => { list: any[]; label: string; value: string }` | --                             |
 | multiple         | type=select 时是否多选                       | `boolean`                                                     | false                          |
-| clearable        | type=select 或时间类型 时是否可清空          | `boolean`                                                     | false                          |
+| clearable        | 是否可清空          | `boolean`                                                     | false                          |
 | startPlaceholder | 时间范围选择器中开始时间的占位符             | `string`                                                      | --                             |
 | endPlaceholder   | 时间范围选择器中结束时间的占位符             | `string`                                                      | --                             |
 | format           | 时间类型选择器输入框显示时间的格式           | `string`                                                      | YYYY-MM-DD/YYYY-MM-DD HH:mm:ss |

@@ -19,7 +19,8 @@ const total = ref(11)
 
 const query = ref<any>({
   page: 1,
-  limit: 10
+  limit: 10,
+  sex: ''
 })
 
 const crudOption = ref<any>({
@@ -80,18 +81,40 @@ const crudOption = ref<any>({
       viewSpan: 6,
     },
     {
+      label: "性别",
+      prop: 'sex',
+      width: 150,
+      viewSpan: 6,
+      search: true,
+      type: "select",
+      dicData: [
+        {
+          label: "男",
+          value: 1
+        },
+        {
+          label: "女",
+          value: 2
+        }
+      ]
+    },
+    {
       label: "备注",
       prop: 'remark',
       overHidden: true
     },
   ]
 })
+
+const handleSearch = (form: any) => {
+  console.log(form)
+}
 </script>
 
 
 <template>
   <div>
-    <MCrud :permission="{add: true}" ref="crudRef" v-model:search="query" v-model="modelForm" :total="total" :data="tableData" :option="crudOption">
+    <MCrud :permission="{add: true}" ref="crudRef" v-model:search="query" v-model="modelForm" @search="handleSearch" :total="total" :data="tableData" :option="crudOption">
       <!-- <template #topLeft="{size}">
         <el-button :size="size" type="default">导出</el-button>
       </template> -->
