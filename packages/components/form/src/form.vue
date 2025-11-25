@@ -583,7 +583,7 @@ defineExpose({
                 <template v-if="column.type === 'picture'">
                   <MPicture
                     :src="getDetailPic(proxys, column)[0]"
-                    :preview-src-list="getDetailPic(proxys, column)[0]"
+                    :preview-src-list="getDetailPic(proxys, column)"
                     img-width="100px"
                     img-height="100px"
                   />
