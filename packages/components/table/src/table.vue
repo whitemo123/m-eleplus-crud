@@ -389,6 +389,7 @@ defineExpose({
         :align="column.align || 'center'"
         :show-overflow-tooltip="column.overHidden"
         :formatter="column.formatter ? ((row: any, col: any, cellValue: any, index: number) => (column as any).formatter(row, column, index)) : null"
+        :selectable="column.selectable"
       >
         <!--帮助信息-->
         <template v-if="column.help" #header>

@@ -46,7 +46,7 @@ const selectData = ref<any>([])
   <div style="width: 100%">
     <MTable v-model:select="selectData" :option="tableOption" :data="tableData">
       <template #menu="{ row, $index }">
-        <el-link type="primary" :underline="false">自定义</el-link>
+        <el-link type="primary" underline="never">自定义</el-link>
       </template>
     </MTable>
   </div>

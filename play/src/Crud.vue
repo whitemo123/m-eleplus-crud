@@ -13,6 +13,13 @@ const tableData = ref<any>([
     age: 18,
     remark: '撒啊撒娇很久很久不打说不定还是德国撒娇好的vgdhv爱得更多v韩国va韩国v爱韩庚v的萨汗国的v阿达好尬v的安徽的vga的'
   },
+  {
+    id: '121',
+    nickName: '王局',
+    name: '王局',
+    age: 18,
+    remark: '撒啊撒娇很久很久不打说不定还是德国撒娇好的vgdhv爱得更多v韩国va韩国v爱韩庚v的萨汗国的v阿达好尬v的安徽的vga的'
+  },
 ])
 
 const total = ref(11)
@@ -28,7 +35,15 @@ const crudOption = ref<any>({
   border: true,
   column: [
     {
-      type: "index"
+      type: "selection",
+      width: 50,
+      align: "center",
+      selectable: (row: any) => {
+        if (row.id == '124545785441457845') {
+          return false
+        }
+        return true
+      }
     },
     {
       label: "ID",
@@ -128,7 +143,7 @@ const handleSearch = (form: any) => {
         {{ row.nickName }}-{{ $index }}
       </template>
       <template #id="{row, $index}">
-        <el-link type="primary" @click="crudRef.rowView(row, $index)" :underline="false">{{ row.id }}</el-link>
+        <el-link type="primary" @click="crudRef.rowView(row, $index)" underline="never">{{ row.id }}</el-link>
       </template>
     </MCrud>
   </div>
