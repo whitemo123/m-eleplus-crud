@@ -133,6 +133,13 @@ export interface ICrudCommonColumn
 
 export interface ICrudColumn extends ICrudCommonColumn {
   type?: ColumnType | 'index' | 'single' | 'selection'
+  /**
+   * @description 仅对 type=selection 的列有效，类型为 Function，Function 的返回值用来决定这一行的 CheckBox 是否可以勾选
+   * @param row 行数据
+   * @param index 索引
+   * @returns 
+   */
+  selectable?: (row: any, index: number) => boolean
 }
 
 /**
