@@ -136,6 +136,14 @@ const selectionChange = (arrs: any[]) => {
 }
 
 /**
+ * 表格排序变化
+ * @param data 
+ */
+const sortChange = (data: {column: any, prop: string, order: any }) => {
+  emit('sortChange', data)
+}
+
+/**
  * 单选选择
  * @param index 索引
  */
@@ -361,6 +369,7 @@ defineExpose({
       :stripe="tableOption.stripe"
       :row-key="tableOption.rowKey"
       @selection-change="selectionChange"
+      @sort-change="sortChange"
     >
       <template #empty>
         <div
@@ -390,6 +399,7 @@ defineExpose({
         :show-overflow-tooltip="column.overHidden"
         :formatter="column.formatter ? ((row: any, col: any, cellValue: any, index: number) => (column as any).formatter(row, column, index)) : null"
         :selectable="column.selectable"
+        :sortable="column.sortable"
       >
         <!--帮助信息-->
         <template v-if="column.help" #header>

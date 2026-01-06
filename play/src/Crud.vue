@@ -94,6 +94,7 @@ const crudOption = ref<any>({
       prop: 'age',
       width: 150,
       viewSpan: 6,
+      sortable: 'custom'
     },
     {
       label: "性别",
@@ -124,12 +125,16 @@ const crudOption = ref<any>({
 const handleSearch = (form: any) => {
   console.log(form)
 }
+
+const handleSortChange = (data: {column: any, prop: string, order: any }) => {
+  console.log(data)
+}
 </script>
 
 
 <template>
   <div>
-    <MCrud :permission="{add: true}" ref="crudRef" v-model:search="query" v-model="modelForm" @search="handleSearch" :total="total" :data="tableData" :option="crudOption">
+    <MCrud :permission="{add: true}" ref="crudRef" v-model:search="query" v-model="modelForm" @search="handleSearch" :total="total" :data="tableData" :option="crudOption" @sort-change="handleSortChange">
       <!-- <template #topLeft="{size}">
         <el-button :size="size" type="default">导出</el-button>
       </template> -->

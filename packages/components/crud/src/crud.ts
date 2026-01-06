@@ -139,7 +139,11 @@ export interface ICrudColumn extends ICrudCommonColumn {
    * @param index 索引
    * @returns 
    */
-  selectable?: (row: any, index: number) => boolean
+  selectable?: (row: any, index: number) => boolean,
+  /**
+   * @description 对应列是否可以排序， 如果设置为 'custom'，则代表用户希望远程排序，需要监听 Table 的 sort-change 事件
+   */
+  sortable?: boolean | string
 }
 
 /**
@@ -301,6 +305,12 @@ export const crudEmits = {
    * @returns
    */
   'update:modelValue': (value: any) => isObject(value),
+  /**
+   * 表格自定义排序模式下排序变化触发
+   * @param data 
+   * @returns 
+   */
+  sortChange: (data: {column: any, prop: string, order: any }) => true,
   /**
    * 查询事件触发
    * @param form 查询表单数据

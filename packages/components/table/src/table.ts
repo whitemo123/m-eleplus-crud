@@ -63,6 +63,10 @@ export interface ITableColumn extends ICommonColumn, ITableCommonColumn {
    * @returns 
    */
   selectable?: (row: any, index: number) => boolean
+  /**
+   * @description 对应列是否可以排序， 如果设置为 'custom'，则代表用户希望远程排序，需要监听 Table 的 sort-change 事件
+   */
+  sortable?: boolean | string
 }
 
 /**
@@ -170,6 +174,12 @@ export type TableProps = ExtractPropTypes<typeof tableProps>
 
 export const tableEmits = {
   'update:select': (arr: any[]) => isArray(arr),
+  /**
+   * 表格自定义排序模式下排序变化触发
+   * @param data 
+   * @returns 
+   */
+  sortChange: (data: {column: any, prop: string, order: any }) => true,
   /**
    * 表格选择数据触发
    * @param arr 选择的数据

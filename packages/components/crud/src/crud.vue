@@ -567,6 +567,14 @@ const copyObjectExcept = (sourceObj: any, excludeKeys: string[] = []) => {
   return result
 }
 
+/**
+ * 排序变化
+ * @param data 
+ */
+const sortChange = (data: {column: any, prop: string, order: any }) => {
+  emit('sortChange', data)
+}
+
 watch(
   () => props.option as ICrudOption,
   (newVal: ICrudOption) => {
@@ -696,6 +704,7 @@ defineExpose({
       :option="tableOption"
       :height="tableHeight"
       :max-height="tableHeight"
+      @sort-change="sortChange"
     >
       <!-- 列表插槽 -->
       <template
