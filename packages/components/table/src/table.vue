@@ -119,8 +119,8 @@ const openPreviewCode = (text: string, type = 1) => {
       dom!.innerHTML = ''
       new Qrcode(dom, {
         text,
-        width: 180,
-        height: 180,
+        width: 360,
+        height: 360,
       })
     }
   }, 0)
