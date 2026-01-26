@@ -487,7 +487,7 @@ defineExpose({
       v-model="codePreviewDialog"
       :title="t('m.table.preview')"
       :size="size"
-      width="300px"
+      width="600px"
       :save-btn="false"
       :cancel-btn="false"
     >
